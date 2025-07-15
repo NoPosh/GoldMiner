@@ -1427,6 +1427,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   turnSpeed: 100
+  maxTurnSpeed: 2
+  maxDistanceForTurn: 800
   isMoving: 0
 --- !u!1 &2100369885
 GameObject:
