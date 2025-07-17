@@ -4,7 +4,9 @@ public class BaseGoldMine : MonoBehaviour
 {
     //Можно еще механику, что чем ближе к жиле, тем выше шанс на редкую
     [SerializeField] protected int usesCount = 1;
+
     protected bool isActive = true;
+    public bool IsActive { get { return isActive; } }
     public enum MineType
     {
         Simple,

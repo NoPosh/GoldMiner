@@ -31,6 +31,7 @@ public class DigComponent : MonoBehaviour
             BaseGoldMine currentMine = goldMines[0];
             foreach (BaseGoldMine m in goldMines)
             {
+                if (!m.IsActive) continue;
                 if ((int)m._MineType > perspective)
                 {
                     perspective = (int)m._MineType;
