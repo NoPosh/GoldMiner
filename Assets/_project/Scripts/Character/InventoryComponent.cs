@@ -3,14 +3,17 @@ using System.Collections.Generic;
 
 public class InventoryComponent : MonoBehaviour
 {
-    /*
-    Пока что хранит только грунт    
-    */
+    [SerializeField] private int inventoryCapacity = 10;
     public List<Soil> soilInventory = new List<Soil>();
 
     public void TakeSoil(Soil soil)
     {
-        soilInventory.Add(soil);
+        if (soilInventory.Count < inventoryCapacity)
+        {
+            soilInventory.Add(soil);
+            Debug.Log($"Добыт грунт {soil.Rare} уровня");
+        }
+        else Debug.Log("Недостаточно места");
     }
 }
 

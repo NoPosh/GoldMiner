@@ -41,15 +41,12 @@ public class DigComponent : MonoBehaviour
 
             Soil newSoil = currentMine.GetSoil();
             inventoryComponent.TakeSoil(newSoil);
-
-            Debug.Log("Вы выкопали Грунт: " + newSoil.Rare);
         }
         else
         {
             int perspective = 0;
             Soil newSoil = new Soil(perspective);
             inventoryComponent.TakeSoil(newSoil);
-            Debug.Log("Вы выкопали Грунт: " + perspective);
         }
     }
 
