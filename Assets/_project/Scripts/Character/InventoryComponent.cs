@@ -47,10 +47,16 @@ public class InventoryComponent : MonoBehaviour
 
         return false;    //Инвентарь заполнен
     }
+
+    public void RemoveItem(BaseItem item)
+    {
+        //Трата ресурсов
+    }
+    //UseItem?
 }
 
 [System.Serializable]
-public class InventoryCell
+public class InventoryCell          //Может быть AddItem сюда вшить, как и остальное
 {
     public BaseItem item;
     public int amount;
