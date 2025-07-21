@@ -3,28 +3,58 @@ using System.Collections.Generic;
 
 public class InventoryComponent : MonoBehaviour
 {
-    [SerializeField] private int inventoryCapacity = 10;
-    public List<Soil> soilInventory = new List<Soil>();
+    [SerializeField] private int size = 20;
+    public List<InventoryCell> cells = new List<InventoryCell>();
 
-    public void TakeSoil(Soil soil)
+    private void Awake()
     {
-        if (soilInventory.Count < inventoryCapacity)
+        for (int i = 0; i < size; i++)
         {
-            soilInventory.Add(soil);
-            Debug.Log($"Добыт грунт {soil.Rare} уровня");
+            cells.Add(new InventoryCell());
         }
-        else Debug.Log("Недостаточно места");
+    }
+
+    public bool AddItem(BaseItem newItem, int amount = 1)
+    {
+        if (newItem.isStackable)
+        {
+            foreach (InventoryCell cell in cells)
+            {
+                if (cell.item == newItem && cell.amount < newItem.maxStack)
+                {
+                    int space = newItem.maxStack - cell.amount;
+                    int toAdd = Mathf.Min(space, amount);
+                    cell.amount += toAdd;
+                    amount -= toAdd;
+
+                    if (amount <= 0) return true;
+                }
+            }
+        }
+
+        //Ищем пустой слот
+        foreach (InventoryCell cell in cells)
+        {
+            if (cell.IsEmpty)
+            {
+                int toAdd = Mathf.Min(newItem.maxStack, amount);
+                cell.item = newItem;
+                cell.amount = toAdd;
+                amount -= toAdd;
+                return true;
+            }
+        }
+
+        return false;    //Инвентарь заполнен
     }
 }
 
-public class Soil
+[System.Serializable]
+public class InventoryCell
 {
-    //Редкость (0 - 3 звезды)
-    [Range(0, 3)] private int rare;    
-    public int Rare { get { return rare; } private set { } }
+    public BaseItem item;
+    public int amount;
 
-    public Soil (int rare, float treasurePerspective = 0)
-    {
-        this.rare = rare;
-    }
+    public bool IsEmpty => item == null || amount <= 0;
+    //+ различные флаги (заблокирован, выделен и тд)
 }
