@@ -10,9 +10,16 @@ public class PlayerController : MonoBehaviour
     private InputAction moveAction;
     private InputAction lookAction;
 
+    [Header("Настройки управления")]
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float turnRotate = 0.1f;
     [SerializeField] private float smoothing = 10f;
+    [Header("Настройки гравитации")]
+    [SerializeField] private float gravityForce = -9.81f;
+    [SerializeField] private float maxFallSpeed = -20f;
+
+    private float verticalVelocity = 0f;
+
 
     private float verticalAngle = 0f;
     private float horizontalAngle = 0f;
@@ -34,13 +41,27 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()   //Добавить гравитацию
     {
-        Vector2 direction = moveAction.ReadValue<Vector2>();
-        
-        direction = direction * moveSpeed * Time.deltaTime;
+        Vector2 direction = moveAction.ReadValue<Vector2>();        
 
-        if (direction != Vector2.zero)
+        Vector3 move = (transform.forward * direction.y + transform.right * direction.x).normalized * moveSpeed;
+
+        HandleGravity();
+
+        move.y = verticalVelocity;
+        characterController.Move(move * Time.deltaTime);  //Нужно чтобы от себя шел вперед куда смотрит
+    }
+
+    void HandleGravity()
+    {
+        if (characterController.isGrounded)
         {
-            characterController.Move(transform.forward * direction.y + transform.right * direction.x);  //Нужно чтобы от себя шел вперед куда смотрит
+            verticalVelocity = -1f;  // Лёгкое "прижатие" к земле
+        }
+        else
+        {
+            Debug.Log("Падаем");
+            verticalVelocity += gravityForce * Time.deltaTime;
+            verticalVelocity = Mathf.Max(verticalVelocity, maxFallSpeed); // Ограничиваем скорость падения
         }
     }
 
