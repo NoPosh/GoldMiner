@@ -1,20 +1,30 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 2f;
+    private CharacterController characterController;
+    [SerializeField] private Transform virtualCamera;
 
-    public float turnSpeed = 100f;
-    public float maxTurnSpeed = 1f;
-    [Tooltip("Расстояние при максимальной скорости поворота в пикселях")]
-    public float maxDistanceForTurn = 200f;
+    private InputAction moveAction;
+    private InputAction lookAction;
 
-    public bool isMoving = false;
+    [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float turnRotate = 0.1f;
+    [SerializeField] private float smoothing = 10f;
 
-    private int leftTouchFingerId = -1;
-    private float previousTochX;
-    private float startTochX;
-    
+    private float verticalAngle = 0f;
+    private float horizontalAngle = 0f;
+
+    private void Start()
+    {
+        characterController = GetComponent<CharacterController>();
+        moveAction = InputSystem.actions.FindAction("Move");
+        lookAction = InputSystem.actions.FindAction("Look");
+
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 
     private void Update()
     {
@@ -22,66 +32,33 @@ public class PlayerController : MonoBehaviour
         HandleRotation();
     }
 
-    void HandleMovement()
+    void HandleMovement()   //Добавить гравитацию
     {
-        if (isMoving)
+        Vector2 direction = moveAction.ReadValue<Vector2>();
+        
+        direction = direction * moveSpeed * Time.deltaTime;
+
+        if (direction != Vector2.zero)
         {
-            transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+            characterController.Move(transform.forward * direction.y + transform.right * direction.x);  //Нужно чтобы от себя шел вперед куда смотрит
         }
     }
 
-    //Пока зажато, нужно сверять начальной точкой нажатия,
-    //и пока не отпущено не переставать поворачивать,
-    //Если палец дальше половины экрана, тоже не перестовать
-    void HandleRotation()           
+    void HandleRotation()   //Добавить сглаживание   (адекватное, а не будто пьяный)         
     {
-#if UNITY_EDITOR
-        if (Input.GetMouseButtonDown(0) && Input.mousePosition.x < Screen.width / 2)
-        {
-            startTochX = Input.mousePosition.x;
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            if (startTochX != 0)
-            {
-                float deltaX = Input.mousePosition.x - startTochX;
-                float deltaRotate = Mathf.Sign(deltaX);
-                float distance = Mathf.Abs(deltaX);
+       Vector2 lookDirection = lookAction.ReadValue<Vector2>();
 
-                float t = Mathf.Clamp01(distance / maxDistanceForTurn);
-                // Получаем плавную скорость поворота
-                float smoothRotate = Mathf.Lerp(0, maxTurnSpeed, t);
+        horizontalAngle += lookDirection.x * turnRotate;
+        verticalAngle -= lookDirection.y * turnRotate;
 
-                transform.Rotate(Vector3.up, deltaRotate * smoothRotate * turnSpeed * Time.deltaTime);
-            }
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            startTochX = 0;
-        }
+        verticalAngle = Mathf.Clamp(verticalAngle, -90f, 90f);
 
-#else   //Переделать управление как на компе
-        foreach (Touch touch in Input.touches)
-        {
-            if (touch.phase == TouchPhase.Began && touch.position.x < Screen.width / 2)
-            {
-                leftTouchFingerId = touch.fingerId;
-                previousTochX = touch.position.x;
-            }
-            else if (touch.fingerId == leftTouchFingerId)
-            {
-                if (touch.phase == TouchPhase.Moved)
-                {
-                    float deltaX = touch.position.x - previousTochX;
-                    transform.Rotate(Vector3.up, deltaX * turnSpeed * Time.deltaTime / 10f);
-                    previousTochX = touch.position.x;
-                }
-            }
-            else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
-            {
-                leftTouchFingerId = -1;
-            }
-        }
-#endif
+        transform.rotation = Quaternion.Euler(0f, horizontalAngle, 0f);
+        //Quaternion targetRotation = Quaternion.Euler(0f, horizontalAngle, 0f); 
+        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothing);
+
+        //Quaternion cameraTargtetRotation = Quaternion.Euler(verticalAngle, 0f, 0f);
+        //virtualCamera.localRotation = Quaternion.Slerp(virtualCamera.localRotation, cameraTargtetRotation, Time.deltaTime * smoothing);
+        virtualCamera.transform.localRotation = Quaternion.Euler(verticalAngle, 0, 0f);
     }
 }
