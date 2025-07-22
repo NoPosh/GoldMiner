@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class InventoryComponent : MonoBehaviour
 {
     [SerializeField] private int size = 20;
+    public int Size {  get { return size; } }
     public List<InventoryCell> cells = new List<InventoryCell>();
 
     private void Awake()
@@ -49,14 +50,23 @@ public class InventoryComponent : MonoBehaviour
         }
 
         Debug.Log("Нет места в инвентаре");
-        return false;    //Инвентарь заполнен
+        return false;
     }
 
-    public void RemoveItem(BaseItem item)
+    public void RemoveItem(BaseItem item, int amount)
     {
-        //Трата ресурсов
+        
     }
-    //UseItem?
+    
+    public void MoveItem(int fromIndex, int toIndex)
+    {
+
+    }
+
+    public void UseItem(int index)
+    {
+
+    }
 }
 
 [System.Serializable]

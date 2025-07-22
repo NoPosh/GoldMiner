@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[System.Obsolete]
 public struct ItemPickedUpEvent
 {
     public GameObject picker;

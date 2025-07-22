@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class InteractorComponent : MonoBehaviour
 {
     [SerializeField] float interactionDistance = 3.0f;
+    [SerializeField, Tooltip("Ширина вылетаемого луча")] float interationRadius = 0.2f;
     [SerializeField] LayerMask interactableLayer; //Слой для предметов
     private CinemachineCamera playerCamera;
 
@@ -32,7 +33,7 @@ public class InteractorComponent : MonoBehaviour
     {
         currentInteractable = null;
 
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionDistance, interactableLayer))
+        if (Physics.SphereCast(playerCamera.transform.position, interationRadius, playerCamera.transform.forward, out RaycastHit hit, interactionDistance, interactableLayer))
         {
             if (hit.collider.TryGetComponent(out IInteractable interactable))
             {
