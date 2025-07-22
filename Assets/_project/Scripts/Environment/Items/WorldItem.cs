@@ -1,6 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Analytics;
+using MyGame.EventBus;
 
 public class WorldItem : MonoBehaviour, IInteractable
 {
@@ -8,7 +8,7 @@ public class WorldItem : MonoBehaviour, IInteractable
     public int amount = 1;
 
 
-    public void Interact(GameObject interactor)
+    public virtual void Interact(GameObject interactor)
     {
         //При взаимодействии вызывается событие (например OnPickupItem)
         //Менеджер игры обрабатывает событие
@@ -21,14 +21,22 @@ public class WorldItem : MonoBehaviour, IInteractable
         //Analytics записывает статистику.
         //Добавляется запись в блокнот, сохранение и тд
 
-        //Открывается сундук -> сундук спавнит предметы -> в квсетах отмечается, что сундук найден -> ловушка или засада -> звук и ui
-        if (interactor.TryGetComponent(out InventoryComponent inventory))
+        if (interactor.TryGetComponent(out InventoryComponent inventory))   //Возможно лучше InventorySystem
         {
-            // Событие, что предмет подобран
-            //EventBus.Raise(new ItemPickedUpEvent(interactor, item, amount));
+            // Событие, что предмет хотят поднять с коллбеком
 
-            // Можно сразу уничтожить объект
-            Destroy(gameObject);
+            EventBus.Raise(new ItemPickupAttemptEvent()
+            {
+                picker = interactor,
+                item = this.item,
+                amount = this.amount,
+                onResult = (success) =>
+                {
+                    if (success) Destroy(gameObject);
+                    else
+                        Debug.Log("Нельзя взять этот предмет");
+                }
+            });
         }
     }
 }

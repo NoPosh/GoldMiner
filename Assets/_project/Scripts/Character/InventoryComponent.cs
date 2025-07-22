@@ -27,6 +27,8 @@ public class InventoryComponent : MonoBehaviour
                     cell.amount += toAdd;
                     amount -= toAdd;
 
+                    
+                    Debug.Log($"Добавили {newItem.itemName} x {toAdd} в {cells.IndexOf(cell)} слот");
                     if (amount <= 0) return true;
                 }
             }
@@ -41,10 +43,12 @@ public class InventoryComponent : MonoBehaviour
                 cell.item = newItem;
                 cell.amount = toAdd;
                 amount -= toAdd;
+                Debug.Log($"Добавили {newItem.itemName} x {toAdd} в {cells.IndexOf(cell)} слот");
                 return true;
             }
         }
 
+        Debug.Log("Нет места в инвентаре");
         return false;    //Инвентарь заполнен
     }
 
