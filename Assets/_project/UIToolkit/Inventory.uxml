@@ -1,0 +1,11 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_project/UIToolkit/Inventory.uss?fileID=7433441132597879392&amp;guid=d318a369744720b439479f802cb85606&amp;type=3#Inventory" />
+    <engine:VisualElement name="InventoryRoot" style="flex-grow: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.38); justify-content: center; align-self: center;">
+        <engine:Label text="Инвентарь" class="inventory-title" />
+        <engine:VisualElement style="flex-grow: 0; background-color: rgba(41, 41, 41, 0.47); width: 70%; height: 70%; flex-direction: column; align-self: center; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;">
+            <engine:ScrollView name="InventoryScroll" mode="VerticalAndHorizontal" style="width: 100%; height: 100%; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;">
+                <engine:VisualElement style="width: 100px; height: 100px; background-color: rgba(0, 0, 0, 0.38); margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+            </engine:ScrollView>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

@@ -1,0 +1,10 @@
+VisualElement {
+}
+
+.inventory-title {
+    align-self: center;
+    -unity-font-style: bold;
+    font-size: 35px;
+    -unity-text-outline-color: rgba(255, 255, 255, 0);
+    color: rgb(255, 255, 255);
+}

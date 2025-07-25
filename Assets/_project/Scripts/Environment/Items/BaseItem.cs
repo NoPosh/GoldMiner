@@ -11,4 +11,9 @@ public class BaseItem : ScriptableObject
     public bool isStackable;
     public int maxStack = 1;
     public int price;
+
+    public virtual void Use()   //Нужен не для всех
+    {
+        Debug.Log("Предмет использован");
+    }
 }

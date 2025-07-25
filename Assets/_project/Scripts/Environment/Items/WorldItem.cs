@@ -34,9 +34,10 @@ public class WorldItem : MonoBehaviour, IInteractable
                 {
                     if (success) Destroy(gameObject);
                     else
-                        Debug.Log("Нельзя взять этот предмет");
+                        Debug.Log("Не получилось взять этот предмет");
                 }
             });
         }
     }
+
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using MyGame.EventBus;
 
 public class InventoryComponent : MonoBehaviour
 {
@@ -30,7 +31,9 @@ public class InventoryComponent : MonoBehaviour
 
                     
                     Debug.Log($"Добавили {newItem.itemName} x {toAdd} в {cells.IndexOf(cell)} слот");
-                    if (amount <= 0) return true;
+                    EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
+                    if (amount <= 0) 
+                        return true;
                 }
             }
         }
@@ -45,6 +48,7 @@ public class InventoryComponent : MonoBehaviour
                 cell.amount = toAdd;
                 amount -= toAdd;
                 Debug.Log($"Добавили {newItem.itemName} x {toAdd} в {cells.IndexOf(cell)} слот");
+                EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
                 return true;
             }
         }
@@ -58,7 +62,56 @@ public class InventoryComponent : MonoBehaviour
         
     }
     
-    public void MoveItem(int fromIndex, int toIndex)
+    //Перемещение внутри одного инвентаря
+    public bool MoveItem(int fromIndex, int toIndex)
+    {
+        if (fromIndex == toIndex) return false;
+
+        var fromCell = cells[fromIndex];
+        var toCell = cells[toIndex];
+
+        if (!fromCell.IsEmpty && !toCell.IsEmpty)
+        {
+            (toCell.item, fromCell.item) = (fromCell.item, toCell.item);
+            (toCell.amount, fromCell.amount) = (fromCell.amount, toCell.amount);
+        }
+        else
+        {
+            toCell.item = fromCell.item;
+            toCell.amount = fromCell.amount;
+
+            fromCell.Clear();
+        }
+
+        EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
+        return true;
+    }
+
+    //Перемещение между инвентарями
+    public static bool MoveItemBetween(InventoryComponent fromInv, int fromIndex, InventoryComponent toInv, int toIndex)
+    {
+        var fromCell = fromInv.cells[fromIndex];
+        var toCell = toInv.cells[toIndex];
+
+        // Обмен местами (если оба слота заняты)
+        if (!fromCell.IsEmpty && !toCell.IsEmpty)
+        {
+            (toCell.item, fromCell.item) = (fromCell.item, toCell.item);
+            (toCell.amount, fromCell.amount) = (fromCell.amount, toCell.amount);
+        }
+        else // Просто перенос
+        {
+            toCell.item = fromCell.item;
+            toCell.amount = fromCell.amount;
+
+            fromCell.Clear();
+        }
+
+        EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
+        return true;
+    }
+
+    public void DropItem(int index, int amount)
     {
 
     }
@@ -76,5 +129,11 @@ public class InventoryCell          //Может быть AddItem сюда вшить, как и остал
     public int amount;
 
     public bool IsEmpty => item == null || amount <= 0;
+
+    public void Clear()
+    {
+        item = null; 
+        amount = 0;
+    }
     //+ различные флаги (заблокирован, выделен и тд)
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using MyGame.EventBus;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -14,6 +15,17 @@ public class InventoryUI : MonoBehaviour
         BuildGrid();
     }
 
+    private void OnEnable()
+    {
+        EventBus.Subscribe<OnInventoryChanged>(UpdateUI);
+        UpdateUI();
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<OnInventoryChanged>(UpdateUI);
+    }
+
     private void BuildGrid()
     {
         for (int i = 0; i < inventory.Size; i++)
@@ -25,11 +37,15 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    //Если слоты будут меняться динамически, то можно добавить метод RebuildGrid, который добавляет, удаляет
+
     private void UpdateUI()
     {
+        if (inventory == null || slots.Count == 0) return;
+
         for (int i = 0; i < slots.Count; i++)
         {
-            slots[i].Refresh(); // обновить иконку/текст
+            slots[i].Refresh();
         }
     } 
     

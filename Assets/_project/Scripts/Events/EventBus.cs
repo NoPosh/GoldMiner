@@ -21,6 +21,11 @@ namespace MyGame.EventBus
             listeners[type].Add(callback);
         }
 
+        public static void Subscribe<T>(Action callback)
+        {
+            Subscribe<T>(_ => callback());
+        }
+
         public static void Unsubscribe<T>(Action<T> callback)
         {
             var type = typeof(T);
@@ -30,12 +35,17 @@ namespace MyGame.EventBus
             }
         }
 
+        public static void Unsubscribe<T>(Action callback)
+        {
+            Unsubscribe<T>(_ => callback());
+        }
+
         public static void Raise<T>(T eventData)
         {
             var type = typeof(T);
             if (listeners.TryGetValue(type,out var list))
             {
-                foreach (var listener in list.OfType<Action<T>>())
+                foreach (var listener in list.OfType<Action<T>>())                    
                     listener.Invoke(eventData);
             }
         }

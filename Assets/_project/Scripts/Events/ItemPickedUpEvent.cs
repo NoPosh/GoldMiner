@@ -23,3 +23,8 @@ public struct ItemPickupAttemptEvent
     public int amount;
     public Action<bool> onResult;  // Callback для результата
 }
+
+public struct OnInventoryChanged
+{
+
+}
