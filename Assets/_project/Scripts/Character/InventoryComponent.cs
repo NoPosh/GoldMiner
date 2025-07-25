@@ -4,7 +4,7 @@ using MyGame.EventBus;
 
 public class InventoryComponent : MonoBehaviour
 {
-    [SerializeField] private int size = 20;
+    [SerializeField] private int size = 20; //ћб константа?
     public int Size {  get { return size; } }
     public List<InventoryCell> cells = new List<InventoryCell>();
 
@@ -119,6 +119,11 @@ public class InventoryComponent : MonoBehaviour
     public void UseItem(int index)
     {
 
+    }
+
+    public BaseItem GetItem(int index)
+    {
+        return cells[index].item;
     }
 }
 

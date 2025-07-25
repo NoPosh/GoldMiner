@@ -24,7 +24,31 @@ public struct ItemPickupAttemptEvent
     public Action<bool> onResult;  // Callback для результата
 }
 
+public struct OnOpenChest
+{
+    public InventoryComponent Inventory;
+    public OnOpenChest (InventoryComponent inventory)
+    { 
+        this.Inventory = inventory; 
+    }
+}
+
 public struct OnInventoryChanged
+{
+
+}
+
+public struct OnInventoryInteract
+{
+
+}
+
+public struct OnInventoryOpen
+{
+
+}
+
+public struct OnInventoryClose
 {
 
 }

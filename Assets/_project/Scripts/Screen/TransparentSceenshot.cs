@@ -2,6 +2,7 @@ using UnityEngine;
 using System.IO;
 
 //¬ дальнейшем можно сделать, чтобы была кнопка в инспекторе или как Tool
+//+ можно сделать чтобы сохран€л сразу спрайтом
 public class TransparentSceenshot : MonoBehaviour
 {
     public Camera screenshotCamera;

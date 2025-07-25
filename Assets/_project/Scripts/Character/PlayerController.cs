@@ -59,7 +59,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Падаем");
             verticalVelocity += gravityForce * Time.deltaTime;
             verticalVelocity = Mathf.Max(verticalVelocity, maxFallSpeed); // Ограничиваем скорость падения
         }
@@ -82,4 +81,5 @@ public class PlayerController : MonoBehaviour
         //virtualCamera.localRotation = Quaternion.Slerp(virtualCamera.localRotation, cameraTargtetRotation, Time.deltaTime * smoothing);
         virtualCamera.transform.localRotation = Quaternion.Euler(verticalAngle, 0, 0f);
     }
+
 }
