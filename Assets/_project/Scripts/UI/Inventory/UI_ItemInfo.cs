@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UI_ItemInfo : MonoBehaviour
 {
-    
+   
     [SerializeField] GameObject itemInfoPanel;
     [SerializeField] Image itemImage;
     [SerializeField] TMP_Text itemTitle;
@@ -44,11 +44,16 @@ public class UI_ItemInfo : MonoBehaviour
     {
         if (e.cell.item != null)
         {
+            itemImage.enabled = true;
             itemImage.sprite = e.cell.item.icon;
             itemTitle.text = e.cell.item.itemName;
             itemDiscription.text = e.cell.item.itemDiscription;
             //TODO: + текст с amount, price и тд
             if (!IsPanelOpened) OpenInfoPanel();
+        }
+        else
+        {
+            itemImage.enabled = false;
         }
        
     }

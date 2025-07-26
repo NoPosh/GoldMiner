@@ -127,7 +127,7 @@ public class InventoryComponent : MonoBehaviour
     public BaseItem GetItem(int index)
     {
         return cells[index].item;
-    }
+    }   //Надо ли
 
     public int GetFirstFreeSlotIndex()    //Возможно надо сделать скрипт, который отслеживает открыт или закрыт второй инвентарь
     {

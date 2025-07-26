@@ -17,7 +17,7 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
-        BuildGrid();
+        BuildGrid();        
     }
 
     private void OnEnable()

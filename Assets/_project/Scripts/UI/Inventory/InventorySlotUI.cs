@@ -85,7 +85,6 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             //Ивент, который передает Cell
             EventBus.Raise<OnItemShiftClick>(new OnItemShiftClick(inventoryComponent.cells[slotIndex]));
         }
-
     }
 
     private void ShowContextMenu()

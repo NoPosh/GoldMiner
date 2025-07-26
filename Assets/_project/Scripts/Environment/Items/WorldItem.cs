@@ -21,10 +21,8 @@ public class WorldItem : MonoBehaviour, IInteractable
         //Analytics записывает статистику.
         //Добавляется запись в блокнот, сохранение и тд
 
-        if (interactor.TryGetComponent(out InventoryComponent inventory))   //Возможно лучше InventorySystem
+        if (interactor.TryGetComponent(out InventoryComponent inventory))
         {
-            // Событие, что предмет хотят поднять с коллбеком
-
             EventBus.Raise(new ItemPickupAttemptEvent()
             {
                 picker = interactor,
