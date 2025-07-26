@@ -1,13 +1,16 @@
 using MyGame.EventBus;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class InventorySlotUI : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     //Префаб слота - своя картинка + предмета
     private int slotIndex;
     private InventoryComponent inventoryComponent;
+
+    private InputAction shiftAction;
 
     public InventoryComponent Inventory { get { return inventoryComponent; } private set { } }
 
@@ -15,6 +18,11 @@ public class InventorySlotUI : MonoBehaviour, IPointerDownHandler, IBeginDragHan
 
     [SerializeField] Image itemImage;
     [SerializeField] Button Button;
+
+    private void Awake()
+    {
+        shiftAction = InputSystem.actions.FindAction("Sprint");
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -67,10 +75,17 @@ public class InventorySlotUI : MonoBehaviour, IPointerDownHandler, IBeginDragHan
         EventBus.Raise(new OnItemPointerExit());
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)
             ShowContextMenu();
+
+        if (eventData.button == PointerEventData.InputButton.Left && shiftAction.IsPressed())
+        {
+            //Ивент, который передает Cell
+            EventBus.Raise<OnItemShiftClick>(new OnItemShiftClick(inventoryComponent.cells[slotIndex]));
+        }
+
     }
 
     private void ShowContextMenu()

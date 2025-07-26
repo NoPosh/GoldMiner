@@ -42,11 +42,14 @@ public class UI_ItemInfo : MonoBehaviour
 
     private void ShowInfo(OnItemPointerEnter e)
     {
-        itemImage.sprite = e.cell.item.icon;
-        itemTitle.text = e.cell.item.itemName;
-        itemDiscription.text = e.cell.item.itemDiscription;
-
-        if (!IsPanelOpened) OpenInfoPanel();
-        //TODO: + текст с amount, price и тд
+        if (e.cell.item != null)
+        {
+            itemImage.sprite = e.cell.item.icon;
+            itemTitle.text = e.cell.item.itemName;
+            itemDiscription.text = e.cell.item.itemDiscription;
+            //TODO: + текст с amount, price и тд
+            if (!IsPanelOpened) OpenInfoPanel();
+        }
+       
     }
 }

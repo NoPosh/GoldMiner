@@ -12,7 +12,8 @@ public class InventoryComponent : MonoBehaviour
     {
         for (int i = 0; i < size; i++)
         {
-            cells.Add(new InventoryCell());
+            InventoryCell cell = new InventoryCell(i, this);
+            cells.Add(cell);
         }
     }
 
@@ -65,6 +66,7 @@ public class InventoryComponent : MonoBehaviour
     //Перемещение внутри одного инвентаря
     public bool MoveItem(int fromIndex, int toIndex)
     {
+        if (toIndex == -1) return false;
         if (fromIndex == toIndex) return false;
 
         var fromCell = cells[fromIndex];
@@ -90,6 +92,7 @@ public class InventoryComponent : MonoBehaviour
     //Перемещение между инвентарями
     public static bool MoveItemBetween(InventoryComponent fromInv, int fromIndex, InventoryComponent toInv, int toIndex)
     {
+        if (fromIndex == -1 || toIndex == -1) return false;
         var fromCell = fromInv.cells[fromIndex];
         var toCell = toInv.cells[toIndex];
 
@@ -125,15 +128,37 @@ public class InventoryComponent : MonoBehaviour
     {
         return cells[index].item;
     }
+
+    public int GetFirstFreeSlotIndex()    //Возможно надо сделать скрипт, который отслеживает открыт или закрыт второй инвентарь
+    {
+        int ind = -1;
+        foreach (var cell in cells)
+        {
+            if (cell.item == null)
+            {
+                ind = cell.index;
+                return ind;
+            }
+        }
+        return ind;
+    }
 }
 
 [System.Serializable]
-public class InventoryCell          //Может быть AddItem сюда вшить, как и остальное
+public class InventoryCell  //Мб сюда добавить, чтобы знал номер слота
 {
     public BaseItem item;
     public int amount;
+    public int index = -1;
+    public InventoryComponent Inventory;
 
     public bool IsEmpty => item == null || amount <= 0;
+
+    public InventoryCell(int index, InventoryComponent inventory)
+    {
+        this.index = index;
+        this.Inventory = inventory;
+    }
 
     public void Clear()
     {

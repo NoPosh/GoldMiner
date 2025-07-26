@@ -3,12 +3,17 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance { get; private set; }
     [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private GameObject sideInventoryPanel;
 
-    private bool _inventoryPanelActive => _inventoryPanel.activeSelf;
-    private bool _sideInventoryPanelActive => sideInventoryPanel.activeSelf;
-    
+    public bool _inventoryPanelActive => _inventoryPanel.activeSelf;
+    public bool _sideInventoryPanelActive => sideInventoryPanel.activeSelf;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void OnEnable()
     {

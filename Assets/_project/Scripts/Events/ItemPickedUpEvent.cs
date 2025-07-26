@@ -62,6 +62,17 @@ public struct OnItemPointerEnter
     }
 }
 
+public struct OnItemShiftClick
+{
+    public InventoryCell cell;
+    public OnItemShiftClick(InventoryCell cell)
+    {
+        this.cell = cell;
+    }
+        
+
+}
+
 public struct OnItemPointerExit
 {
 
