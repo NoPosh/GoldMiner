@@ -1,8 +1,9 @@
+using MyGame.EventBus;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlotUI : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class InventorySlotUI : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
     //Префаб слота - своя картинка + предмета
     private int slotIndex;
@@ -54,6 +55,16 @@ public class InventorySlotUI : MonoBehaviour, IPointerDownHandler, IBeginDragHan
                     Inventory, slotIndex
                 );
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        EventBus.Raise(new OnItemPointerEnter(inventoryComponent.cells[slotIndex]));
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        EventBus.Raise(new OnItemPointerExit());
     }
 
     public void OnPointerDown(PointerEventData eventData)

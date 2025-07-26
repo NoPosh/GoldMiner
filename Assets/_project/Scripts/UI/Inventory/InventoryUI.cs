@@ -73,7 +73,7 @@ public class InventoryUI : MonoBehaviour
             slots[i].Refresh();
         }
 
-        if (true)
+        if (true)   //TODO: проверку надо ли обновлять слоты второго инвентаря
         {
             for (int i = 0; i < sideSlots.Count; i++)
             {

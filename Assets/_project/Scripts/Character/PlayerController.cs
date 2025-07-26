@@ -1,3 +1,4 @@
+using MyGame.EventBus;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     private float verticalVelocity = 0f;
 
+    private bool canMove = true;
 
     private float verticalAngle = 0f;
     private float horizontalAngle = 0f;
@@ -33,10 +35,23 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    private void OnEnable()
+    {
+        EventBus.Subscribe<OnInventoryOpen>(StopMovement);
+        EventBus.Subscribe<OnInventoryClose>(StartMovement);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<OnInventoryOpen>(StopMovement);
+        EventBus.Unsubscribe<OnInventoryClose>(StartMovement);
+    }
+
     private void Update()
     {
         HandleMovement();
-        HandleRotation();
+        if (canMove)
+            HandleRotation();
     }
 
     void HandleMovement()   //Добавить гравитацию
@@ -48,7 +63,8 @@ public class PlayerController : MonoBehaviour
         HandleGravity();
 
         move.y = verticalVelocity;
-        characterController.Move(move * Time.deltaTime);  //Нужно чтобы от себя шел вперед куда смотрит
+        if (canMove)
+            characterController.Move(move * Time.deltaTime);  //Нужно чтобы от себя шел вперед куда смотрит
     }
 
     void HandleGravity()
@@ -74,12 +90,18 @@ public class PlayerController : MonoBehaviour
         verticalAngle = Mathf.Clamp(verticalAngle, -90f, 90f);
 
         transform.rotation = Quaternion.Euler(0f, horizontalAngle, 0f);
-        //Quaternion targetRotation = Quaternion.Euler(0f, horizontalAngle, 0f); 
-        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothing);
-
-        //Quaternion cameraTargtetRotation = Quaternion.Euler(verticalAngle, 0f, 0f);
-        //virtualCamera.localRotation = Quaternion.Slerp(virtualCamera.localRotation, cameraTargtetRotation, Time.deltaTime * smoothing);
+        
         virtualCamera.transform.localRotation = Quaternion.Euler(verticalAngle, 0, 0f);
+    }
+
+    void StopMovement()
+    {
+        canMove = false;
+    }
+
+    void StartMovement()
+    {
+        canMove = true;
     }
 
 }

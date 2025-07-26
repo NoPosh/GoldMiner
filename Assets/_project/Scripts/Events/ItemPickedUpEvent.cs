@@ -24,7 +24,7 @@ public struct ItemPickupAttemptEvent
     public Action<bool> onResult;  // Callback для результата
 }
 
-public struct OnOpenChest
+public struct OnOpenChest   //Открытие сундука
 {
     public InventoryComponent Inventory;
     public OnOpenChest (InventoryComponent inventory)
@@ -33,12 +33,12 @@ public struct OnOpenChest
     }
 }
 
-public struct OnInventoryChanged
+public struct OnInventoryChanged    //Если что-то меняется в инвентаре
 {
 
 }
 
-public struct OnInventoryInteract
+public struct OnInventoryInteract   //Нажата кнопка инвентаря
 {
 
 }
@@ -49,6 +49,20 @@ public struct OnInventoryOpen
 }
 
 public struct OnInventoryClose
+{
+
+}
+
+public struct OnItemPointerEnter
+{
+    public InventoryCell cell;
+    public OnItemPointerEnter(InventoryCell cell)
+    {
+        this.cell = cell;
+    }
+}
+
+public struct OnItemPointerExit
 {
 
 }
