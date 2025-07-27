@@ -39,7 +39,7 @@ public class InteractorComponent : MonoBehaviour
             {
                 currentInteractable = interactable;
                 //Подсветка, подсказка
-                Debug.Log("Навелись на " + hit.collider.gameObject.name);
+                //Debug.Log("Навелись на " + hit.collider.gameObject.name);
             }
         }
     }

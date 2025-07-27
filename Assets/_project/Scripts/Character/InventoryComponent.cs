@@ -4,14 +4,14 @@ using MyGame.EventBus;
 
 public class InventoryComponent : MonoBehaviour
 {
-    [SerializeField] private int size = 20;
+    [SerializeField] protected int size = 20;
     public int Size {  get { return size; } }
     public List<InventoryCell> cells = new List<InventoryCell>();
 
-    [SerializeField] private Transform dropPoint;
-    [SerializeField] private float dropForce = 5f; //Мб сделать что-то типо мини игры с силой кидания
+    [SerializeField] protected Transform dropPoint;
+    [SerializeField] protected float dropForce = 5f; //Мб сделать что-то типо мини игры с силой кидания
 
-    private void Awake()
+    protected virtual void Awake()
     {
         for (int i = 0; i < size; i++)
         {
@@ -61,14 +61,14 @@ public class InventoryComponent : MonoBehaviour
         return false;
     }
 
-    public void RemoveItem(int index, int amount = 1)
+    public virtual void RemoveItem(int index, int amount = 1)
     {
         cells[index].Clear();
         EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
     }
     
     //Перемещение внутри одного инвентаря
-    public bool MoveItem(int fromIndex, int toIndex)
+    public virtual bool MoveItem(int fromIndex, int toIndex)
     {
         if (toIndex == -1) return false;
         if (fromIndex == toIndex) return false;
@@ -95,8 +95,18 @@ public class InventoryComponent : MonoBehaviour
 
     //Перемещение между инвентарями
     public static bool MoveItemBetween(InventoryComponent fromInv, int fromIndex, InventoryComponent toInv, int toIndex)
-    {
+    {        
         if (fromIndex == -1 || toIndex == -1) return false;
+        //Если второй инвентарь это перераб, то можно только породу
+        if (toInv is RecyclerInventory)
+        {
+            if (!(fromInv.cells[fromIndex].item is OreData))
+            {
+                Debug.Log("В переработчик можно положить только руду");
+                return false;
+            }
+        }
+
         var fromCell = fromInv.cells[fromIndex];
         var toCell = toInv.cells[toIndex];
 
@@ -118,9 +128,8 @@ public class InventoryComponent : MonoBehaviour
         return true;
     }
 
-    public void DropItem(int index, int amount = 1)
+    public virtual void DropItem(int index, int amount = 1) //Подумать о том, чтобы использовать пулл объектов
     {
-        //Заспавнить с теми же скриптами (сейчас это либо WorldItem, либо Ore)
         GameObject dropped = Instantiate(cells[index].item.itemPrefab, dropPoint);
         dropped.transform.SetParent(null);
         dropped.GetComponent<WorldItem>().amount = cells[index].amount;
@@ -134,17 +143,17 @@ public class InventoryComponent : MonoBehaviour
         }
     }
 
-    public void UseItem(int index)
+    public virtual void UseItem(int index)
     {
 
     }
 
-    public BaseItem GetItem(int index)
+    public virtual BaseItem GetItem(int index)
     {
         return cells[index].item;
     }   //Надо ли
 
-    public int GetFirstFreeSlotIndex()
+    public virtual int GetFirstFreeSlotIndex()
     {
         int ind = -1;
         foreach (var cell in cells)

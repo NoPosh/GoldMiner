@@ -16,6 +16,7 @@ public class InventorySystem : MonoBehaviour
         EventBus.Subscribe<ItemPickupAttemptEvent>(OnPickupAttempt);
         EventBus.Subscribe<OnItemShiftClick>(HandleShiftClick);
         EventBus.Subscribe<OnOpenChest>(SetSideInventory);
+        EventBus.Subscribe<OnOpenRecycle>(SetSideInventory);
     }
 
     private void OnDestroy()
@@ -23,6 +24,7 @@ public class InventorySystem : MonoBehaviour
         EventBus.Unsubscribe<ItemPickupAttemptEvent>(OnPickupAttempt);
         EventBus.Unsubscribe<OnItemShiftClick>(HandleShiftClick);
         EventBus.Unsubscribe<OnOpenChest>(SetSideInventory);
+        EventBus.Unsubscribe<OnOpenRecycle>(SetSideInventory);
     }
 
     private void OnPickupAttempt(ItemPickupAttemptEvent e)
@@ -64,5 +66,9 @@ public class InventorySystem : MonoBehaviour
     private void SetSideInventory(OnOpenChest e)
     {
         sideInventory = e.Inventory;
+    }
+    private void SetSideInventory(OnOpenRecycle e)
+    {
+        sideInventory = e.recycler.InputInventory;
     }
 }

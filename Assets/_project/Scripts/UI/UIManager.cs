@@ -19,12 +19,14 @@ public class UIManager : MonoBehaviour
     {
         EventBus.Subscribe<OnInventoryInteract>(InteractInventory);
         EventBus.Subscribe<OnOpenChest>(OpenSideInventory);
+        EventBus.Subscribe<OnOpenRecycle>(OpenSideInventory);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<OnInventoryOpen>(InteractInventory);
         EventBus.Unsubscribe<OnOpenChest>(OpenSideInventory);
+        EventBus.Unsubscribe<OnOpenRecycle>(OpenSideInventory);
     }
 
     private void Start()
@@ -59,6 +61,11 @@ public class UIManager : MonoBehaviour
     {
         OpenInventory();
         sideInventoryPanel.SetActive(true);
+    }
+    private void OpenSideInventory(OnOpenRecycle e)
+    {
+        OpenInventory();
+        //Панелька перераба открывается в другом месте. Почему?
     }
 
     private void CloseSideInventory()

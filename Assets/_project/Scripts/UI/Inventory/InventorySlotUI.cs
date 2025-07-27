@@ -111,6 +111,11 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void Refresh()
     {
         //Показать предмет в слоте
+        if (itemImage == null)
+        {
+            Debug.Log("Нет Image для слота " + slotIndex);
+            return;
+        }
         var item = inventoryComponent.cells[slotIndex].item;
         if (item != null && item.icon != null)
         {

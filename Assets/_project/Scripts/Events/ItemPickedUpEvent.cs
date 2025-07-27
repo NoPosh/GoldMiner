@@ -33,6 +33,15 @@ public struct OnOpenChest   //Открытие сундука
     }
 }
 
+public struct OnOpenRecycle
+{
+    public Recycler recycler;
+    public OnOpenRecycle(Recycler recycler)
+    {
+        this.recycler = recycler;
+    }
+}
+
 public struct OnInventoryChanged    //Если что-то меняется в инвентаре
 {
 

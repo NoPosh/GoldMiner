@@ -3,10 +3,17 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/BaseItem")]
 public class BaseItem : ScriptableObject
 {
+    public enum ItemType
+    {
+        None,
+        Ore
+    }
+
     //Может быть помещен в инвентарь
     public string itemName;
     public string itemDiscription;
 
+    public ItemType itemType;
     public GameObject itemPrefab;
     public Sprite icon;
     public bool isStackable;
