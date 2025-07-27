@@ -11,9 +11,9 @@ public class UI_RecycleInventory : MonoBehaviour
     [SerializeField] private InventorySlotUI slotPrefab;
 
     private Recycler currentRecycler;
-    private List<InventorySlotUI> slots = new();
+    [SerializeField] private List<InventorySlotUI> slots = new();
 
-    private List<InventorySlotUI> secondSlots = new();
+    [SerializeField] private List<InventorySlotUI> secondSlots = new();
 
     private void OnEnable() //TODO: закрытие этой панели
     {
@@ -58,6 +58,9 @@ public class UI_RecycleInventory : MonoBehaviour
         {
             Destroy(tr.gameObject);
         }
+        slots.Clear();
+        secondSlots.Clear();
+
         for (int i = 0; i < currentRecycler.InputInventory.Size; i++)
         {
             var slot = Instantiate(slotPrefab, gridParent);
