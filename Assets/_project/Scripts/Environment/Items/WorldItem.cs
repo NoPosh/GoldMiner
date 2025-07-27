@@ -10,6 +10,7 @@ public class WorldItem : MonoBehaviour, IInteractable
 
     public virtual void Interact(GameObject interactor)
     {
+        /*
         //При взаимодействии вызывается событие (например OnPickupItem)
         //Менеджер игры обрабатывает событие
 
@@ -20,7 +21,7 @@ public class WorldItem : MonoBehaviour, IInteractable
         //SoundManager играет звук.
         //Analytics записывает статистику.
         //Добавляется запись в блокнот, сохранение и тд
-
+        */
         if (interactor.TryGetComponent(out InventoryComponent inventory))
         {
             EventBus.Raise(new ItemPickupAttemptEvent()

@@ -1,21 +1,60 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SimpleSpawner : MonoBehaviour
 {
-    //Выбирает точки для спавна:
-    /*
-    1. В области (или областях, или еще как-то)
-    2. С максимальным количеством
-    3. С промежутками
-    4. Возможно связан с другими спавнерами (или возможность включать/выключать спавнер)
-    5. Отдает команду (пока что в генератор почвы) (в какую точку спавнить)
+    //Висит на спавнере, время от времени передает точку и Ore в спавнер руда
 
-    Будут другие спавнеры. Может базовый класс спавнеров сделать или фабричный метод? или какой-то паттерн?
-     */
+    public SpawnerConfig config;
+    private List<GameObject> spawnedObjects = new List<GameObject>();
 
-    //Лист коллайдеров? Или областей?
+    private BoxCollider collider;
+    private float timer;
 
-    //Функция просчета точки?
+    private void Start()
+    {
+        collider = GetComponent<BoxCollider>();
+    }
 
-    //Отправление куда надо (менеджер или еще что-то), мб выбор тоже этот сделать через параметр
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        if (timer >= config.spawnInterval)
+        {
+            timer = 0;
+            TrySpawn();
+        }
+    }
+
+    void TrySpawn()
+    {
+        if (spawnedObjects.Count >= config.maxObjects) return;
+
+        Vector3 spawnPoint = GetRandomPointInZone();
+        OreData oreData = PickRandomOre();
+
+        GameObject ore = SpawnerManager.Instance.SpawnOre(oreData, spawnPoint);
+        spawnedObjects.Add(ore);
+    }
+
+    OreData PickRandomOre() //TODO: сделать возможность по вероятностям
+    {
+        int index = Random.Range(0, config.possibleOres.Count);
+        return config.possibleOres[index];
+
+    }
+
+    Vector3 GetRandomPointInZone()
+    {
+        BoxCollider box = collider;
+        Vector3 localPos = new Vector3(
+        Random.Range(-box.size.x / 2, box.size.x / 2),
+        Random.Range(-box.size.y / 2, box.size.y / 2),
+        Random.Range(-box.size.z / 2, box.size.z / 2)
+        );
+        Vector3 worldPos = box.transform.TransformPoint(localPos);
+        return worldPos;
+    }
 }
+

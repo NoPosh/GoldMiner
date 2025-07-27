@@ -10,7 +10,6 @@ public class BaseItem : ScriptableObject
     public Sprite icon;
     public bool isStackable;
     public int maxStack = 1;
-    public int price;
 
     public virtual void Use()   //Нужен не для всех
     {
