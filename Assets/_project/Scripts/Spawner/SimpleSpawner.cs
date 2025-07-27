@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using MyGame.EventBus;
 
 public class SimpleSpawner : MonoBehaviour
 {
@@ -15,6 +16,16 @@ public class SimpleSpawner : MonoBehaviour
     private void Start()
     {
         collider = GetComponent<BoxCollider>();
+    }
+
+    private void OnEnable()
+    {
+        EventBus.Subscribe<OnOreCollectedGloabal>(RemoveFromList);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<OnOreCollectedGloabal>(RemoveFromList);
     }
 
     private void Update()
@@ -55,6 +66,12 @@ public class SimpleSpawner : MonoBehaviour
         );
         Vector3 worldPos = box.transform.TransformPoint(localPos);
         return worldPos;
+    }
+
+    void RemoveFromList(OnOreCollectedGloabal e)
+    {        
+        spawnedObjects.Remove(e.ore.gameObject);
+        Debug.Log("Удалили из списка");
     }
 }
 

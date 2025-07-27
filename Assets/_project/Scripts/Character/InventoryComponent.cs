@@ -4,9 +4,12 @@ using MyGame.EventBus;
 
 public class InventoryComponent : MonoBehaviour
 {
-    [SerializeField] private int size = 20; //Мб константа?
+    [SerializeField] private int size = 20;
     public int Size {  get { return size; } }
     public List<InventoryCell> cells = new List<InventoryCell>();
+
+    [SerializeField] private Transform dropPoint;
+    [SerializeField] private float dropForce = 5f; //Мб сделать что-то типо мини игры с силой кидания
 
     private void Awake()
     {
@@ -58,9 +61,10 @@ public class InventoryComponent : MonoBehaviour
         return false;
     }
 
-    public void RemoveItem(BaseItem item, int amount)
+    public void RemoveItem(int index, int amount = 1)
     {
-        
+        cells[index].Clear();
+        EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
     }
     
     //Перемещение внутри одного инвентаря
@@ -114,9 +118,20 @@ public class InventoryComponent : MonoBehaviour
         return true;
     }
 
-    public void DropItem(int index, int amount)
+    public void DropItem(int index, int amount = 1)
     {
+        //Заспавнить с теми же скриптами (сейчас это либо WorldItem, либо Ore)
+        GameObject dropped = Instantiate(cells[index].item.itemPrefab, dropPoint);
+        dropped.transform.SetParent(null);
+        dropped.GetComponent<WorldItem>().amount = cells[index].amount;
 
+        RemoveItem(index);
+       
+        Rigidbody rb = dropped.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.AddForce(dropPoint.forward * dropForce, ForceMode.Impulse);
+        }
     }
 
     public void UseItem(int index)
@@ -129,7 +144,7 @@ public class InventoryComponent : MonoBehaviour
         return cells[index].item;
     }   //Надо ли
 
-    public int GetFirstFreeSlotIndex()    //Возможно надо сделать скрипт, который отслеживает открыт или закрыт второй инвентарь
+    public int GetFirstFreeSlotIndex()
     {
         int ind = -1;
         foreach (var cell in cells)

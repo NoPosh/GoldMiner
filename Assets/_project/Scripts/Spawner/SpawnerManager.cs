@@ -12,7 +12,7 @@ public class SpawnerManager : MonoBehaviour
 
     public GameObject SpawnOre(OreData data, Vector3 position)
     {
-        var obj = Instantiate(data.orePrefab, position, Quaternion.identity);
+        var obj = Instantiate(data.itemPrefab, position, Quaternion.identity);
         int potential = Random.Range(data.potentialRange.x, data.potentialRange.y);
         obj.GetComponent<Ore>().Init(data, potential);
         return obj;

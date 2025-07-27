@@ -7,12 +7,13 @@ public class BaseItem : ScriptableObject
     public string itemName;
     public string itemDiscription;
 
+    public GameObject itemPrefab;
     public Sprite icon;
     public bool isStackable;
     public int maxStack = 1;
 
     public virtual void Use()   //Нужен не для всех
     {
-        Debug.Log("Предмет использован");
+        //Debug.Log("Предмет использован");
     }
 }

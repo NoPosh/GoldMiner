@@ -77,3 +77,12 @@ public struct OnItemPointerExit
 {
 
 }
+
+public struct OnOreCollectedGloabal
+{
+    public Ore ore;
+    public OnOreCollectedGloabal(Ore ore)
+    {
+        this.ore = ore;
+    }
+}

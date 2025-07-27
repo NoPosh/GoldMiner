@@ -7,15 +7,14 @@ using UnityEngine.UI;
 public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     //Префаб слота - своя картинка + предмета
-    private int slotIndex;
+    public int slotIndex { get; private set; }
     private InventoryComponent inventoryComponent;
 
     private InputAction shiftAction;
 
     public InventoryComponent Inventory { get { return inventoryComponent; } private set { } }
 
-    private static InventorySlotUI draggedSlot;
-
+    public static InventorySlotUI draggedSlot { get; private set; }
     [SerializeField] Image itemImage;
     [SerializeField] Button Button;
 
