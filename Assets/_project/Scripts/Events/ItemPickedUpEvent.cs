@@ -42,6 +42,19 @@ public struct OnOpenRecycle
     }
 }
 
+public struct OnItemDropped
+{
+    public GameObject obj;
+    public Transform dropPoint;
+    public float force;
+    public OnItemDropped(GameObject gameObject, Transform dropPoint, float force = 5f)
+    {
+        this.obj = gameObject;
+        this.dropPoint = dropPoint;
+        this.force = force;
+    }
+}
+
 public struct OnInventoryChanged    //Если что-то меняется в инвентаре
 {
 

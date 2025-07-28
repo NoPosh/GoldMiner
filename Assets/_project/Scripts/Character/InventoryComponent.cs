@@ -1,143 +1,64 @@
 using UnityEngine;
 using System.Collections.Generic;
 using MyGame.EventBus;
+using MyGame.Inventory;
 
 public class InventoryComponent : MonoBehaviour
 {
     [SerializeField] protected int size = 20;
-    public int Size {  get { return size; } }
-    public List<InventoryCell> cells = new List<InventoryCell>();
-
     [SerializeField] protected Transform dropPoint;
     [SerializeField] protected float dropForce = 5f; //Мб сделать что-то типо мини игры с силой кидания
 
+    public int Size => size;
+    private Inventory inventory;
+    public Inventory Inventory { get { return inventory; } }
+
+
+
+
     protected virtual void Awake()
     {
-        for (int i = 0; i < size; i++)
-        {
-            InventoryCell cell = new InventoryCell(i, this);
-            cells.Add(cell);
-        }
+        inventory = new Inventory(size);
+        inventory.OnInventoryChanged += () => EventBus.Raise(new OnInventoryChanged());
     }
 
     public bool AddItem(BaseItem newItem, int amount = 1)
     {
-        if (newItem.isStackable)
-        {
-            foreach (InventoryCell cell in cells)
-            {
-                if (cell.item == newItem && cell.amount < newItem.maxStack)
-                {
-                    int space = newItem.maxStack - cell.amount;
-                    int toAdd = Mathf.Min(space, amount);
-                    cell.amount += toAdd;
-                    amount -= toAdd;
 
-                    
-                    Debug.Log($"Добавили {newItem.itemName} x {toAdd} в {cells.IndexOf(cell)} слот");
-                    EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
-                    if (amount <= 0) 
-                        return true;
-                }
-            }
-        }
-
-        //Ищем пустой слот
-        foreach (InventoryCell cell in cells)
-        {
-            if (cell.IsEmpty)
-            {
-                int toAdd = Mathf.Min(newItem.maxStack, amount);
-                cell.item = newItem;
-                cell.amount = toAdd;
-                amount -= toAdd;
-                Debug.Log($"Добавили {newItem.itemName} x {toAdd} в {cells.IndexOf(cell)} слот");
-                EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
-                return true;
-            }
-        }
-
-        Debug.Log("Нет места в инвентаре");
-        return false;
+        return inventory.AddItem(newItem, amount);
     }
 
     public virtual void RemoveItem(int index, int amount = 1)
     {
-        cells[index].Clear();
-        EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
+        inventory.RemoveItem(index, amount);
     }
     
     //Перемещение внутри одного инвентаря
     public virtual bool MoveItem(int fromIndex, int toIndex)
     {
-        if (toIndex == -1) return false;
-        if (fromIndex == toIndex) return false;
-
-        var fromCell = cells[fromIndex];
-        var toCell = cells[toIndex];
-
-        if (!fromCell.IsEmpty && !toCell.IsEmpty)
-        {
-            (toCell.item, fromCell.item) = (fromCell.item, toCell.item);
-            (toCell.amount, fromCell.amount) = (fromCell.amount, toCell.amount);
-        }
-        else
-        {
-            toCell.item = fromCell.item;
-            toCell.amount = fromCell.amount;
-
-            fromCell.Clear();
-        }
-
-        EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
-        return true;
+        return inventory.MoveItem(fromIndex, toIndex);
     }
 
     //Перемещение между инвентарями
-    public static bool MoveItemBetween(InventoryComponent fromInv, int fromIndex, InventoryComponent toInv, int toIndex)
-    {        
-        if (fromIndex == -1 || toIndex == -1) return false;
-        //Если второй инвентарь это перераб, то можно только породу
-        if (toInv is RecyclerInventory)
-        {
-            if (!(fromInv.cells[fromIndex].item is OreData))
-            {
-                Debug.Log("В переработчик можно положить только руду");
-                return false;
-            }
-        }
-
-        var fromCell = fromInv.cells[fromIndex];
-        var toCell = toInv.cells[toIndex];
-
-        // Обмен местами (если оба слота заняты)
-        if (!fromCell.IsEmpty && !toCell.IsEmpty)
-        {
-            (toCell.item, fromCell.item) = (fromCell.item, toCell.item);
-            (toCell.amount, fromCell.amount) = (fromCell.amount, toCell.amount);
-        }
-        else // Просто перенос
-        {
-            toCell.item = fromCell.item;
-            toCell.amount = fromCell.amount;
-
-            fromCell.Clear();
-        }
-
-        EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
-        return true;
+    public bool MoveItemBetween(InventoryComponent toInv, int fromIndex, int toIndex)
+    {
+        return Inventory.MoveItemBetween(inventory, fromIndex, toInv.inventory, toIndex);
     }
 
     public virtual void DropItem(int index, int amount = 1) //Подумать о том, чтобы использовать пулл объектов
     {
-        GameObject dropped = Instantiate(cells[index].item.itemPrefab, dropPoint);
-        dropped.transform.SetParent(null);
-        dropped.GetComponent<WorldItem>().amount = cells[index].amount;
+        var cell = inventory.GetCell(index);
+
+        if (cell.IsEmpty) return;
+
+        var prefab = cell.item.itemPrefab;
+
+        var dropped = Instantiate(prefab, dropPoint.position, Quaternion.identity);   //Получить объект из Ивента
+        dropped.GetComponent<WorldItem>().amount = cell.amount;
 
         RemoveItem(index);
        
-        Rigidbody rb = dropped.GetComponent<Rigidbody>();
-        if (rb != null)
+        if (dropped.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.AddForce(dropPoint.forward * dropForce, ForceMode.Impulse);
         }
@@ -150,44 +71,20 @@ public class InventoryComponent : MonoBehaviour
 
     public virtual BaseItem GetItem(int index)
     {
-        return cells[index].item;
+        return inventory.GetCell(index).item;
     }   //Надо ли
 
     public virtual int GetFirstFreeSlotIndex()
     {
-        int ind = -1;
-        foreach (var cell in cells)
+        foreach (var cell in inventory.Cells)
         {
-            if (cell.item == null)
+            if (cell.IsEmpty)
             {
-                ind = cell.index;
-                return ind;
+                return cell.index;
             }
         }
-        return ind;
+        return -1;
     }
 }
 
-[System.Serializable]
-public class InventoryCell  //Мб сюда добавить, чтобы знал номер слота
-{
-    public BaseItem item;
-    public int amount;
-    public int index = -1;
-    public InventoryComponent Inventory;
 
-    public bool IsEmpty => item == null || amount <= 0;
-
-    public InventoryCell(int index, InventoryComponent inventory)
-    {
-        this.index = index;
-        this.Inventory = inventory;
-    }
-
-    public void Clear()
-    {
-        item = null; 
-        amount = 0;
-    }
-    //+ различные флаги (заблокирован, выделен и тд)
-}
