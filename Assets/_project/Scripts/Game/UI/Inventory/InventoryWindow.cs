@@ -1,5 +1,6 @@
 using UnityEngine;
 using MyGame.EventBus;
+using MyGame.Inventory;
 
 public class InventoryWindow : MonoBehaviour
 {
@@ -11,11 +12,13 @@ public class InventoryWindow : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Subscribe<OnInventoryInteract>(InteractInventory);
+        EventBus.Subscribe<OnItemShiftClick>(HandleShiftClick);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<OnInventoryInteract>(InteractInventory);
+        EventBus.Unsubscribe<OnItemShiftClick>(HandleShiftClick);
     }
 
     private void Awake()
@@ -56,6 +59,22 @@ public class InventoryWindow : MonoBehaviour
             Show(e.playerInv, e.otherInv);
             Cursor.lockState = CursorLockMode.None;
             EventBus.Raise<OnInventoryOpen>(new OnInventoryOpen());
+        }
+    }
+
+    private void HandleShiftClick(OnItemShiftClick e)
+    {
+        if (otherInventoryUI.gameObject.activeSelf)
+        {
+            InventoryComponent toInv = e.cell.Inventory == playerInventoryUI.Inventory.Inventory ? otherInventoryUI.Inventory : playerInventoryUI.Inventory;
+            InventoryComponent fromInv = e.cell.Inventory == playerInventoryUI.Inventory.Inventory ? playerInventoryUI.Inventory : otherInventoryUI.Inventory;
+            //Закинуть из в другой
+            Services.InventoryInteractionService.TransferItem(fromInv, e.cell.index, toInv, toInv.GetFirstFreeSlotIndex(), new InteractionContext());
+        }
+        else
+        {
+            InventoryComponent inv = playerInventoryUI.Inventory;
+            Services.InventoryInteractionService.TransferItem(inv, e.cell.index, inv, inv.GetFirstFreeSlotIndex(), new InteractionContext());
         }
     }
 }

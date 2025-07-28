@@ -4,7 +4,7 @@ using MyGame.EventBus;
 
 public class InventoryUI : MonoBehaviour
 {
-    private InventoryComponent inventory;
+    public InventoryComponent Inventory {  get; private set; }
     [SerializeField] private Transform gridParent;   
     [SerializeField] private InventorySlotUI slotPrefab;
 
@@ -12,7 +12,7 @@ public class InventoryUI : MonoBehaviour
 
     public void Bind(InventoryComponent inv)
     {
-        inventory = inv;
+        Inventory = inv;
         BuildGrid();
         UpdateUI();
     }
@@ -35,21 +35,20 @@ public class InventoryUI : MonoBehaviour
             Destroy(slot.gameObject);
         }
         slots.Clear();
-        for (int i = 0; i < inventory.Size; i++)
+        for (int i = 0; i < Inventory.Size; i++)
         {
             var slot = Instantiate(slotPrefab, gridParent);
             slot.SetSlotIndex(i);
-            slot.SetInventory(inventory);
+            slot.SetInventory(Inventory);
             slots.Add(slot);
         }
     }
 
 
     //Если слоты будут меняться динамически, то можно добавить метод RebuildGrid, который добавляет, удаляет
-
     private void UpdateUI()
     {
-        if (inventory == null || slots.Count == 0) return;
+        if (Inventory == null || slots.Count == 0) return;
 
         for (int i = 0; i < slots.Count; i++)
         {

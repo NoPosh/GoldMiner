@@ -13,13 +13,20 @@ public class InventoryComponent : MonoBehaviour
     private Inventory inventory;
     public Inventory Inventory { get { return inventory; } }
 
-
+    private bool IsInitialized = false;
 
 
     protected virtual void Awake()
     {
         inventory = new Inventory(size);
         inventory.OnInventoryChanged += () => EventBus.Raise(new OnInventoryChanged());
+    }
+
+    public void Initialize(Inventory inventory)
+    {
+        if (IsInitialized) return;
+        this.inventory = inventory;
+        IsInitialized = true;
     }
 
     public bool AddItem(BaseItem newItem, int amount = 1)
