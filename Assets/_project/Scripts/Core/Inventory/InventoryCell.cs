@@ -1,4 +1,3 @@
-using UnityEngine;
 using MyGame.Inventory;
 
 [System.Serializable]

@@ -27,8 +27,9 @@ public class ChestComponent : MonoBehaviour, IInteractable
         if (component == null)
         {
             component = gameObject.AddComponent<InventoryComponent>();
-            component.Initialize(Chest.Inventory);
+            
         }
+        component.Initialize(Chest.Inventory);
         return component;
     }
 }

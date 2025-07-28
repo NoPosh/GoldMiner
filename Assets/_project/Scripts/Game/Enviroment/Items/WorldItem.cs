@@ -7,7 +7,6 @@ public class WorldItem : MonoBehaviour, IInteractable
     public BaseItem item;
     public int amount = 1;
 
-
     public virtual void Interact(GameObject interactor)
     {
         /*

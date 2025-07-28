@@ -12,8 +12,8 @@ public class SpawnerConfig : ScriptableObject
     [Tooltip("Сейчас не влияет")] public SpawnZone spawnZone;
     public List<OreData> possibleOres;
     public List<float> spawnChances;
-    public int maxObjects = 10;
-    public float spawnInterval = 15f;
+    public int MaxObjects = 10;
+    public float SpawnInterval = 15f;
     //Зона, например река
     //Список возможных "OreData" с шансами
     //Максимум объектов

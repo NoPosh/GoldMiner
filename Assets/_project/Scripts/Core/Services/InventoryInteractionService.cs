@@ -1,5 +1,4 @@
 using MyGame.Inventory;
-using UnityEngine;
 
 public class InventoryInteractionService
 {
