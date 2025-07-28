@@ -63,8 +63,9 @@ public class InventoryComponent : MonoBehaviour
             pointObject.transform.position = pointInFront;
             dropPoint = pointObject.transform;
         }
-        EventBus.Raise<OnItemDropped>(new OnItemDropped(cell.item, cell.amount, dropPoint.position, dropPoint.forward * dropForce));
+        EventBus.Raise<OnItemDropped>(new OnItemDropped(cell.item, cell.amount, dropPoint.position, dropPoint.forward * dropForce));        
         RemoveItem(index);
+        EventBus.Raise<OnInventoryChanged>(new OnInventoryChanged());
     }
 
     public virtual void UseItem(int index)
