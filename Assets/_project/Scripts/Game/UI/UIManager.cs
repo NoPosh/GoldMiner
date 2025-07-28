@@ -17,22 +17,17 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnInventoryInteract>(InteractInventory);
-        EventBus.Subscribe<OnOpenChest>(OpenSideInventory);
-        EventBus.Subscribe<OnOpenRecycle>(OpenSideInventory);
+        //EventBus.Subscribe<OnInventoryInteract>(InteractInventory);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnInventoryOpen>(InteractInventory);
-        EventBus.Unsubscribe<OnOpenChest>(OpenSideInventory);
-        EventBus.Unsubscribe<OnOpenRecycle>(OpenSideInventory);
+        //EventBus.Unsubscribe<OnInventoryOpen>(InteractInventory);
     }
 
     private void Start()
     {
         CloseInventory();
-        CloseSideInventory();
     }
 
     private void InteractInventory()
@@ -45,7 +40,7 @@ public class UIManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         _inventoryPanel.SetActive(true);
-        EventBus.Raise<OnInventoryOpen>(new OnInventoryOpen());
+        
     }
 
     private void CloseInventory()

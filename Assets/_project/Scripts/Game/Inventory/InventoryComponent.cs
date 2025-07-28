@@ -40,28 +40,24 @@ public class InventoryComponent : MonoBehaviour
     }
 
     //Перемещение между инвентарями
-    public bool MoveItemBetween(InventoryComponent toInv, int fromIndex, int toIndex)
+    public bool MoveItemBetween(InventoryComponent toInv, int fromIndex, int toIndex, InteractionContext context)
     {
-        return Inventory.MoveItemBetween(inventory, fromIndex, toInv.inventory, toIndex);
+        return Services.InventoryInteractionService.TransferItem(this, fromIndex, toInv, toIndex, context);
     }
 
     public virtual void DropItem(int index, int amount = 1) //Подумать о том, чтобы использовать пулл объектов
     {
         var cell = inventory.GetCell(index);
-
         if (cell.IsEmpty) return;
-
-        var prefab = cell.item.itemPrefab;
-
-        var dropped = Instantiate(prefab, dropPoint.position, Quaternion.identity);   //Получить объект из Ивента
-        dropped.GetComponent<WorldItem>().amount = cell.amount;
-
-        RemoveItem(index);
-       
-        if (dropped.TryGetComponent<Rigidbody>(out var rb))
+        if (dropPoint == null) 
         {
-            rb.AddForce(dropPoint.forward * dropForce, ForceMode.Impulse);
+            Vector3 pointInFront = transform.position + transform.forward * 1f;
+            GameObject pointObject = new GameObject("DropPoint");
+            pointObject.transform.position = pointInFront;
+            dropPoint = pointObject.transform;
         }
+        EventBus.Raise<OnItemDropped>(new OnItemDropped(cell.item, cell.amount, dropPoint.position, dropPoint.forward * dropForce));
+        RemoveItem(index);
     }
 
     public virtual void UseItem(int index)

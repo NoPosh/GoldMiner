@@ -44,14 +44,16 @@ public struct OnOpenRecycle
 
 public struct OnItemDropped
 {
-    public GameObject obj;
-    public Transform dropPoint;
-    public float force;
-    public OnItemDropped(GameObject gameObject, Transform dropPoint, float force = 5f)
+    public BaseItem Item;
+    public int Amount;
+    public Vector3 Position;
+    public Vector3 Force;
+    public OnItemDropped(BaseItem item, int amount, Vector3 pos, Vector3 force)
     {
-        this.obj = gameObject;
-        this.dropPoint = dropPoint;
-        this.force = force;
+        this.Item = item;
+        this.Amount = amount;
+        this.Position = pos;
+        this.Force = force;
     }
 }
 
@@ -62,7 +64,14 @@ public struct OnInventoryChanged    //Если что-то меняется в инвентаре
 
 public struct OnInventoryInteract   //Нажата кнопка инвентаря
 {
+    public InventoryComponent playerInv;
+    public InventoryComponent otherInv;
 
+    public OnInventoryInteract(InventoryComponent player, InventoryComponent other = null)
+    {
+        playerInv = player;
+        otherInv = other;
+    }
 }
 
 public struct OnInventoryOpen

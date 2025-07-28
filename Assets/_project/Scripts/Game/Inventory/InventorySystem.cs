@@ -5,8 +5,6 @@ using UnityEngine.InputSystem;
 public class InventorySystem : MonoBehaviour
 {
     private InventoryComponent inventory;
-    private InventoryComponent sideInventory;
-
     private InputAction inventoryAction;
 
     private void Awake()
@@ -14,17 +12,13 @@ public class InventorySystem : MonoBehaviour
         inventory = GetComponent<InventoryComponent>();
         inventoryAction = InputSystem.actions.FindAction("Inventory");
         EventBus.Subscribe<ItemPickupAttemptEvent>(OnPickupAttempt);
-        EventBus.Subscribe<OnItemShiftClick>(HandleShiftClick);
-        EventBus.Subscribe<OnOpenChest>(SetSideInventory);
-        EventBus.Subscribe<OnOpenRecycle>(SetSideInventory);
+        //EventBus.Subscribe<OnItemShiftClick>(HandleShiftClick);
     }
 
     private void OnDestroy()
     {
         EventBus.Unsubscribe<ItemPickupAttemptEvent>(OnPickupAttempt);
-        EventBus.Unsubscribe<OnItemShiftClick>(HandleShiftClick);
-        EventBus.Unsubscribe<OnOpenChest>(SetSideInventory);
-        EventBus.Unsubscribe<OnOpenRecycle>(SetSideInventory);
+        //EventBus.Unsubscribe<OnItemShiftClick>(HandleShiftClick);
     }
 
     private void OnPickupAttempt(ItemPickupAttemptEvent e)
@@ -40,10 +34,11 @@ public class InventorySystem : MonoBehaviour
     {
         if (inventoryAction.triggered)
         {
-            EventBus.Raise<OnInventoryInteract>(new OnInventoryInteract());
+            EventBus.Raise<OnInventoryInteract>(new OnInventoryInteract(inventory));
         }
     }
 
+    /*
     private void HandleShiftClick(OnItemShiftClick e)
     {
         if (UIManager.Instance._sideInventoryPanelActive)
@@ -62,13 +57,6 @@ public class InventorySystem : MonoBehaviour
             inventory.MoveItem(e.cell.index, inventory.GetFirstFreeSlotIndex());
         }
     }
+    */
 
-    private void SetSideInventory(OnOpenChest e)
-    {
-        sideInventory = e.Inventory;
-    }
-    private void SetSideInventory(OnOpenRecycle e)
-    {
-        sideInventory = e.recycler.InputInventory;
-    }
 }

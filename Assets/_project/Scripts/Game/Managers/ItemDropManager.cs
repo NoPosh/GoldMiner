@@ -8,22 +8,21 @@ public class ItemDropManager : MonoBehaviour
     //Слушает событие OnItemDrop и выбрасывает предмет, который надо
     private void OnEnable()
     {
-        
+        EventBus.Subscribe<OnItemDropped>(DropObject);
     }
     private void OnDisable()
     {
-        
+        EventBus.Unsubscribe<OnItemDropped>(DropObject);
     }
 
     private void DropObject(OnItemDropped e)
     {
-        var dropped = Instantiate(e.obj, e.dropPoint.position, Quaternion.identity);
-
-        //dropped.GetComponent<WorldItem>().amount = cell.amount;
+        var dropped = Instantiate(e.Item.itemPrefab, e.Position, Quaternion.identity);
+        dropped.GetComponent<WorldItem>().amount = e.Amount;
 
         if (dropped.TryGetComponent<Rigidbody>(out var rb))
         {
-            rb.AddForce(e.dropPoint.forward * e.force, ForceMode.Impulse);
+            rb.AddForce(e.Force, ForceMode.Impulse);
         }
     }
 }

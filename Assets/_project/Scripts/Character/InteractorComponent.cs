@@ -23,7 +23,7 @@ public class InteractorComponent : MonoBehaviour
     {
         FindTarget();
 
-        if (interactAction.IsPressed())
+        if (interactAction.triggered)
         {
             if (currentInteractable != null) currentInteractable.Interact(gameObject);
         }    

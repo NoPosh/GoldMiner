@@ -15,6 +15,6 @@ public class Chest : MonoBehaviour, IInteractable
         //Спавнит предметы?
         //Открывает сундук + инвентарь
         Debug.Log("Взаимодействие с сундуком");
-        EventBus.Raise<OnOpenChest>(new OnOpenChest(inventoryComponent));
+        EventBus.Raise<OnInventoryInteract>(new OnInventoryInteract(interactor.GetComponent<InventoryComponent>(), inventoryComponent));
     }
 }

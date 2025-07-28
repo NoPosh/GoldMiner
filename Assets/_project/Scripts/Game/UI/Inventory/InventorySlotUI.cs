@@ -6,13 +6,10 @@ using UnityEngine.UI;
 
 public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    //Префаб слота - своя картинка + предмета
     public int slotIndex { get; private set; }
-    private InventoryComponent inventoryComponent;
+    public InventoryComponent InventoryComponent { get; private set; }
 
     private InputAction shiftAction;
-
-    public InventoryComponent Inventory { get { return inventoryComponent; } private set { } }
 
     public static InventorySlotUI draggedSlot { get; private set; }
     [SerializeField] Image itemImage;
@@ -27,7 +24,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (inventoryComponent.cells[slotIndex].item != null)
+            if (InventoryComponent.Inventory.GetCell(slotIndex).item != null)
             {
                 draggedSlot = this;
                 SetAlpha(0.5f);
@@ -54,19 +51,13 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (draggedSlot != null && draggedSlot != this)
         {
-            if (draggedSlot.Inventory == Inventory)
-                Inventory.MoveItem(draggedSlot.slotIndex, slotIndex);
-            else
-                InventoryComponent.MoveItemBetween(
-                    draggedSlot.Inventory, draggedSlot.slotIndex,
-                    Inventory, slotIndex
-                );
+            Services.InventoryInteractionService.TransferItem(draggedSlot.InventoryComponent, draggedSlot.slotIndex, this.InventoryComponent, this.slotIndex, new InteractionContext());
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        EventBus.Raise(new OnItemPointerEnter(inventoryComponent.cells[slotIndex]));
+        EventBus.Raise(new OnItemPointerEnter(InventoryComponent.Inventory.GetCell(slotIndex)));
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -82,13 +73,13 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if (eventData.button == PointerEventData.InputButton.Left && shiftAction.IsPressed())
         {
             //Ивент, который передает Cell
-            EventBus.Raise<OnItemShiftClick>(new OnItemShiftClick(inventoryComponent.cells[slotIndex]));
+            EventBus.Raise<OnItemShiftClick>(new OnItemShiftClick(InventoryComponent.Inventory.GetCell(slotIndex)));
         }
     }
 
     private void ShowContextMenu()
     {
-        var item = inventoryComponent.cells[slotIndex].item;
+        var item = InventoryComponent.Inventory.GetCell(slotIndex).item;
         if (item != null)
         {            
             // Вызов окна с вариантами: "Использовать", "Выбросить", и т.д.
@@ -105,7 +96,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void SetInventory(InventoryComponent inventory)
     {
-        inventoryComponent = inventory;
+        InventoryComponent = inventory;
     }
 
     public void Refresh()
@@ -113,10 +104,10 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         //Показать предмет в слоте
         if (itemImage == null)
         {
-            Debug.Log("Нет Image для " + inventoryComponent);
+            Debug.Log("Нет Image для " + InventoryComponent);
             return;
         }
-        var item = inventoryComponent.cells[slotIndex].item;
+        var item = InventoryComponent.Inventory.GetCell(slotIndex).item;
         if (item != null && item.icon != null)
         {
             itemImage.enabled = true;
