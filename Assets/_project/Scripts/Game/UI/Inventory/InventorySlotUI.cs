@@ -1,4 +1,5 @@
 using MyGame.EventBus;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -14,6 +15,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public static InventorySlotUI draggedSlot { get; private set; }
     [SerializeField] Image itemImage;
     [SerializeField] Button Button;
+    [SerializeField] TMP_Text AmountText;
 
     private void Awake()
     {
@@ -112,10 +114,13 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             itemImage.enabled = true;
             itemImage.sprite = item.icon;
+            AmountText.enabled = true;
+            AmountText.text = InventoryComponent.Inventory.GetCell(slotIndex).amount.ToString();
         }
         else
         {
             itemImage.enabled = false;
+            AmountText.enabled = false;
         }
     }
 

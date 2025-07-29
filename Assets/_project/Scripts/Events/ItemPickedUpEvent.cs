@@ -33,11 +33,13 @@ public struct OnOpenChest   //Открытие сундука
     }
 }
 
-public struct OnOpenRecycle
+public struct OnInteractRecycle
 {
-    public Recycler recycler;
-    public OnOpenRecycle(Recycler recycler)
+    public InventoryComponent playerInv;
+    public RecyclerComponent recycler;
+    public OnInteractRecycle(InventoryComponent playerInv, RecyclerComponent recycler)
     {
+        this.playerInv = playerInv;
         this.recycler = recycler;
     }
 }

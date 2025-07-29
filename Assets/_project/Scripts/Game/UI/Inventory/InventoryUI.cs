@@ -4,31 +4,31 @@ using MyGame.EventBus;
 
 public class InventoryUI : MonoBehaviour
 {
-    public InventoryComponent Inventory {  get; private set; }
-    [SerializeField] private Transform gridParent;   
-    [SerializeField] private InventorySlotUI slotPrefab;
+    public InventoryComponent Inventory {  get; protected set; }
+    [SerializeField] protected Transform gridParent;   
+    [SerializeField] protected InventorySlotUI slotPrefab;
 
-    private List<InventorySlotUI> slots = new();
+    protected List<InventorySlotUI> slots = new();
 
-    public void Bind(InventoryComponent inv)
+    public virtual void Bind(InventoryComponent inv)
     {
         Inventory = inv;
         BuildGrid();
         UpdateUI();
     }
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         EventBus.Subscribe<OnInventoryChanged>(UpdateUI);
         UpdateUI();
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         EventBus.Unsubscribe<OnInventoryChanged>(UpdateUI);
     }
 
-    private void BuildGrid()
+    protected virtual void BuildGrid()
     {
         foreach (var slot in slots)
         {
@@ -46,7 +46,7 @@ public class InventoryUI : MonoBehaviour
 
 
     //Если слоты будут меняться динамически, то можно добавить метод RebuildGrid, который добавляет, удаляет
-    private void UpdateUI()
+    protected virtual void UpdateUI()
     {
         if (Inventory == null || slots.Count == 0) return;
 

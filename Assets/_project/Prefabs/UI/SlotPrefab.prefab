@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 4757818322187074278}
   - component: {fileID: 944329529320733937}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: AmountText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3624562601658528834
 RectTransform:
   m_ObjectHideFlags: 0
@@ -350,3 +350,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemImage: {fileID: 7847190029182812834}
   Button: {fileID: 4608787964554398864}
+  AmountText: {fileID: 944329529320733937}

@@ -1818,7 +1818,7 @@ GameObject:
   - component: {fileID: 251611460}
   - component: {fileID: 251611459}
   m_Layer: 5
-  m_Name: Outout Scroll View
+  m_Name: Output Scroll View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1925,8 +1925,8 @@ GameObject:
   - component: {fileID: 318103093}
   - component: {fileID: 318103092}
   - component: {fileID: 318103091}
-  - component: {fileID: 318103090}
   - component: {fileID: 318103095}
+  - component: {fileID: 318103096}
   m_Layer: 6
   m_Name: Chest
   m_TagString: Untagged
@@ -1934,21 +1934,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &318103090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 318103088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3dd2e9c563e88e4e92bbf64bc2bf963, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  size: 6
-  dropPoint: {fileID: 0}
-  dropForce: 5
 --- !u!65 &318103091
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2053,6 +2038,21 @@ MonoBehaviour:
   size: 6
   chestId: 
   respawnLoot: 0
+--- !u!114 &318103096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318103088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3dd2e9c563e88e4e92bbf64bc2bf963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 1
+  dropPoint: {fileID: 0}
+  dropForce: 5
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -7416,15 +7416,13 @@ GameObject:
   - component: {fileID: 1599404156}
   - component: {fileID: 1599404155}
   - component: {fileID: 1599404159}
-  - component: {fileID: 1599404160}
-  - component: {fileID: 1599404161}
   m_Layer: 6
   m_Name: Resycler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1599404155
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7524,41 +7522,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1599404154}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50e07cd782403674cb3a2401bee2b8fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 14fdc8387d61f2c44b35ca6ad0e29048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 6
-  dropPoint: {fileID: 1048902909}
-  dropForce: 5
---- !u!114 &1599404160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1599404154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f40063bd41f95ed40b612613bc7cd6fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputInventory: {fileID: 1599404159}
-  outputInventory: {fileID: 1599404161}
---- !u!114 &1599404161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1599404154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50e07cd782403674cb3a2401bee2b8fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  size: 6
-  dropPoint: {fileID: 1048902909}
-  dropForce: 5
+  inputSize: 5
+  outputSize: 5
+  recipeDatabase: {fileID: 11400000, guid: 4aa22d0d1385d154fbe13d16be780a10, type: 2}
 --- !u!1001 &1611717888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8529,7 +8498,6 @@ GameObject:
   - component: {fileID: 1891343624}
   - component: {fileID: 1891343628}
   - component: {fileID: 1891343627}
-  - component: {fileID: 1891343626}
   - component: {fileID: 1891343625}
   m_Layer: 0
   m_Name: UIManagers
@@ -8568,24 +8536,8 @@ MonoBehaviour:
   InventoryPanel: {fileID: 722320706}
   playerInventoryUI: {fileID: 430117063}
   otherInventoryUI: {fileID: 922001672}
---- !u!114 &1891343626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1891343623}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5507d6b3a2daa2f419fe286286e88374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RecyclePanel: {fileID: 2026981311}
-  gridParent: {fileID: 105577438}
-  secondGridParent: {fileID: 673596389}
-  slotPrefab: {fileID: 2490462253093787601, guid: 734b6c024032e544281df6e12e76e261, type: 3}
-  slots: []
-  secondSlots: []
+  recycleInventoryUI: {fileID: 2026981315}
+  recycleButton: {fileID: 915307119}
 --- !u!114 &1891343627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9689,6 +9641,7 @@ GameObject:
   - component: {fileID: 2026981312}
   - component: {fileID: 2026981314}
   - component: {fileID: 2026981313}
+  - component: {fileID: 2026981315}
   m_Layer: 5
   m_Name: RecycleSlots
   m_TagString: Untagged
@@ -9757,6 +9710,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2026981311}
   m_CullTransparentMesh: 1
+--- !u!114 &2026981315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026981311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fbcd33663a52f947abc963a6974d305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridParent: {fileID: 105577438}
+  slotPrefab: {fileID: 2490462253093787601, guid: 734b6c024032e544281df6e12e76e261, type: 3}
+  outputGridParent: {fileID: 673596389}
 --- !u!1 &2084441773
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,14 +19,22 @@ public class InventoryComponent : MonoBehaviour
     protected virtual void Awake()
     {
         inventory = new Inventory(size);
-        inventory.OnInventoryChanged += () => EventBus.Raise(new OnInventoryChanged());
+        inventory.OnInventoryChanged += () => InvokeOnInventoryChange();
     }
 
     public void Initialize(Inventory inventory)
-    {
+    {       
         if (IsInitialized) return;
+        inventory.OnInventoryChanged -= () => InvokeOnInventoryChange();
         this.inventory = inventory;
+        size = inventory.Size;
         IsInitialized = true;
+        inventory.OnInventoryChanged += () => InvokeOnInventoryChange();
+    }
+
+    private void InvokeOnInventoryChange()
+    {
+        EventBus.Raise(new OnInventoryChanged());
     }
 
     public bool AddItem(BaseItem newItem, int amount = 1)

@@ -57,11 +57,6 @@ public class UIManager : MonoBehaviour
         OpenInventory();
         sideInventoryPanel.SetActive(true);
     }
-    private void OpenSideInventory(OnOpenRecycle e)
-    {
-        OpenInventory();
-        //Панелька перераба открывается в другом месте. Почему?
-    }
 
     private void CloseSideInventory()
     {

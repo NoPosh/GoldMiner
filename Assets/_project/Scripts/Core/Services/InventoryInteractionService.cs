@@ -13,7 +13,10 @@ public class InventoryInteractionService
 
         if (context.IsRecycler)
         {
-            //Тут проверка, что положить можно только породу
+            if (!(fromCell.item is OreData))
+            {
+                return false;
+            }
         }
 
 

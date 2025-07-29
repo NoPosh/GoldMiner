@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9564c8224ba0a9a46b4797560ed60929, type: 3}
+  m_Name: RecycleRecipeDatabase
+  m_EditorClassIdentifier: 
+  recipes:
+  - InputItem: {fileID: 11400000, guid: 528bdcaaacf874b4f9ee4573189c7667, type: 2}
+    OutputItem: {fileID: 11400000, guid: 0404c35c913d5224a8b618ceba469bb0, type: 2}
+    BaseAmount: 1
+    time: 5

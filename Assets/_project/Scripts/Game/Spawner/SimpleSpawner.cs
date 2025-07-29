@@ -76,7 +76,7 @@ public class SimpleSpawner : MonoBehaviour
                 ItemId = config.possibleOres[i].itemName,
                 SpawnChance = config.spawnChances[i],
                 PotentialRange = config.possibleOres[i].potentialRange,
-                ArtifactChance = config.possibleOres[i].artifactChance
+                ArtifactChanceRange = config.possibleOres[i].artifactPotentialRange
             });
         }
         return settings;

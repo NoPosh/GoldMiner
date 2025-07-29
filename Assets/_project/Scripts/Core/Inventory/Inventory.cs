@@ -127,6 +127,33 @@ namespace MyGame.Inventory
         {
             return _cells[index];
         }
+
+        public bool IsEmpty()
+        {
+            foreach (var cell in _cells)
+            {
+                if (!cell.IsEmpty) return false;
+            }
+            return true;
+        }
+
+        public InventoryCell GetFirstNonEmptyCell()
+        {
+            foreach (var cell in _cells)
+            {
+                if (!cell.IsEmpty) return cell;
+            }
+            return null;
+        }
+
+        public InventoryCell GetFirstEmptyCell()
+        {
+            foreach (var cell in _cells)
+            {
+                if (cell.IsEmpty) return cell;
+            }
+            return null;
+        }
     }
 
 }
