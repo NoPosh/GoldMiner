@@ -37,7 +37,7 @@ public class InventoryComponent : MonoBehaviour
         EventBus.Raise(new OnInventoryChanged());
     }
 
-    public bool AddItem(BaseItem newItem, int amount = 1)
+    public int AddItem(BaseItem newItem, int amount = 1)
     {
 
         return inventory.AddItem(newItem, amount);

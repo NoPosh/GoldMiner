@@ -80,7 +80,7 @@ namespace MyGame.Core
             var resut = recyclingService.ProcessItem(cell.item, cell.item.GetPotential(), RecycleMode.Normal);
             //+ можно сделать еще один сервис, который выбирает выдавать ли артефакты и другие вещи
 
-            if (OutputInventory.AddItem(resut.Item, resut.Amount))
+            if (OutputInventory.AddItem(resut.Item, resut.Amount) == 0)
                 InputInventory.RemoveItem(cell.index, 1);
             
                 

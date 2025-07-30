@@ -23,7 +23,7 @@ public class InventorySystem : MonoBehaviour
     {
         if (e.picker == gameObject)
         {
-            bool added = inventory.AddItem(e.item, e.amount);
+            bool added = inventory.AddItem(e.item, e.amount) != e.amount;
             e.onResult?.Invoke(added);  //Сообщаем результат обратно (вызываем передаваемый делегат)
         }
     }

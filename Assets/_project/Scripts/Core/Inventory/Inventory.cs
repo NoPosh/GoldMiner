@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MyGame.EventBus;
 using System.Drawing;
 using System;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 
 namespace MyGame.Inventory
 {
@@ -30,7 +31,7 @@ namespace MyGame.Inventory
                 }
         }
 
-        public bool AddItem(BaseItem newItem, int amount = 1)
+        public int AddItem(BaseItem newItem, int amount = 1)    //Возвращает сколько не смогли добавить
         {
             if (newItem.isStackable)
             {
@@ -45,12 +46,11 @@ namespace MyGame.Inventory
 
                         OnInventoryChanged?.Invoke();
                         if (amount <= 0)                           
-                            return true;
+                            return 0;
                     }
                 }
             }
 
-            //Ищем пустой слот
             foreach (InventoryCell cell in _cells)
             {
                 if (cell.IsEmpty)
@@ -61,10 +61,11 @@ namespace MyGame.Inventory
                     amount -= toAdd;
 
                     OnInventoryChanged?.Invoke();
-                    return true;
+                    if (amount <= 0) return 0;
                 }
             }
-            return false;
+            OnInventoryChanged?.Invoke();
+            return amount;
         }
 
         public virtual void RemoveItem(int index, int amount = 1)
@@ -83,6 +84,16 @@ namespace MyGame.Inventory
 
             if (!fromCell.IsEmpty && !toCell.IsEmpty)
             {
+                if (fromCell.item.isStackable && fromCell.item == toCell.item)
+                {
+                    int space = toCell.item.maxStack - toCell.amount;
+                    int toAdd = Math.Min(space, fromCell.amount);
+                    toCell.amount += toAdd;
+                    fromCell.amount -= toAdd;
+                    if (fromCell.amount <= 0) fromCell.Clear();
+                    OnInventoryChanged?.Invoke();
+                    return true;
+                }
                 (toCell.item, fromCell.item) = (fromCell.item, toCell.item);
                 (toCell.amount, fromCell.amount) = (fromCell.amount, toCell.amount);
             }
@@ -108,6 +119,18 @@ namespace MyGame.Inventory
             // Обмен местами (если оба слота заняты)
             if (!fromCell.IsEmpty && !toCell.IsEmpty)
             {
+                if (fromCell.item.isStackable && fromCell.item == toCell.item)
+                {
+                    int space = toCell.item.maxStack - toCell.amount;
+                    int toAdd = Math.Min(space, fromCell.amount);
+                    toCell.amount += toAdd;
+                    fromCell.amount -= toAdd;
+                    if (fromCell.amount <= 0) fromCell.Clear();
+
+                    fromInv.OnInventoryChanged?.Invoke();
+                    toInv.OnInventoryChanged?.Invoke();
+                    return true;
+                }
                 (toCell.item, fromCell.item) = (fromCell.item, toCell.item);
                 (toCell.amount, fromCell.amount) = (fromCell.amount, toCell.amount);
             }
