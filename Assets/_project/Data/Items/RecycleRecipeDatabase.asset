@@ -17,3 +17,7 @@ MonoBehaviour:
     OutputItem: {fileID: 11400000, guid: 0404c35c913d5224a8b618ceba469bb0, type: 2}
     BaseAmount: 1
     time: 5
+  - InputItem: {fileID: 11400000, guid: 20037bfb3872812498307d08d7df9253, type: 2}
+    OutputItem: {fileID: 11400000, guid: 0404c35c913d5224a8b618ceba469bb0, type: 2}
+    BaseAmount: 1
+    time: 10

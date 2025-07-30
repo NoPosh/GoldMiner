@@ -65,7 +65,7 @@ namespace MyGame.Core
             }
 
             timer += deltaTime;
-            if (timer > ProcessTime)
+            if (timer >= ProcessTime)
             {
                 timer = 0f;
                 ProcessNextItem();
@@ -77,10 +77,15 @@ namespace MyGame.Core
             var cell = InputInventory.GetFirstNonEmptyCell();
             if (cell == null) return;
 
-            var resut = recyclingService.ProcessItem(cell.item, cell.item.GetPotential(), RecycleMode.Normal);
+            var result = recyclingService.ProcessItem(cell.item, cell.item.GetPotential(), RecycleMode.Normal);
+            if (result.Item == null)
+            {
+                StopProcessing();
+                return;
+            }
             //+ можно сделать еще один сервис, который выбирает выдавать ли артефакты и другие вещи
 
-            if (OutputInventory.AddItem(resut.Item, resut.Amount) == 0)
+            if (OutputInventory.AddItem(result.Item, result.Amount) == 0)
                 InputInventory.RemoveItem(cell.index, 1);
             
                 
