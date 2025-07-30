@@ -3,12 +3,13 @@ using MyGame.Core;
 
 public class CharacterComponent : MonoBehaviour
 {
-    //Имя и все, что есть в классе Character
-
-    public Character Character { get; private set; }
+    public PlayerContext playerContext { get; private set; }
+    public InventoryComponent Inventory { get; private set; }
 
     private void Awake()
     {
-        Character = new Character();   //Тут можно задать все что нужно
+        Inventory = GetComponent<InventoryComponent>();
+        if (Inventory == null) Debug.LogWarning("Инвентарь не назначен");
+        playerContext = new PlayerContext(Inventory.Inventory);
     }
 }

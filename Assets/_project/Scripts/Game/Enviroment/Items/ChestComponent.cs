@@ -17,8 +17,7 @@ public class ChestComponent : MonoBehaviour, IInteractable
 
     public void Interact(GameObject interactor)
     {
-        Debug.Log("Взаимодействие с сундуком");
-        EventBus.Raise<OnInventoryInteract>(new OnInventoryInteract(interactor.GetComponent<InventoryComponent>(), GetInventoryComponent()));
+        EventBus.Raise<OnInventoryInteract>(new OnInventoryInteract(interactor.GetComponent<CharacterComponent>().Inventory, GetInventoryComponent()));
     }
 
     public InventoryComponent GetInventoryComponent()

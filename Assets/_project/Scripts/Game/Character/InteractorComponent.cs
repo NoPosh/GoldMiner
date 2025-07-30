@@ -6,7 +6,7 @@ public class InteractorComponent : MonoBehaviour
 {
     [SerializeField] float interactionDistance = 3.0f;
     [SerializeField, Tooltip("Ширина вылетаемого луча")] float interationRadius = 0.2f;
-    [SerializeField] LayerMask interactableLayer; //Слой для предметов
+    [SerializeField] LayerMask interactableLayer;
     private CinemachineCamera playerCamera;
 
     private IInteractable currentInteractable;
