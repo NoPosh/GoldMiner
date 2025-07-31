@@ -1,18 +1,19 @@
 
-
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace MyGame.Core.Npc
 {
     public class NpcContext
     {
-        public NpcData Data { get;}
         public Inventory.Inventory Inventory { get; private set; }
+        public NpcData Data { get;} //Тут лист способностей        
 
-        //Я бы сюда добавил что-то типо INpcInteract - интерфейс того, как происходит взаимодействие с персонажем
-        //Например открыть диалог -> варианты диалога могут вызвать разные действия (следующая реплика или открыть инвентарь, торговаться и тд)
+        public List<IInteractionProvider> InteractionProviders = new();   //То, что может предложить при взаимодействии
+        public List<IInteractionHandler> InteractHandlers = new();        //Сервис обработки взаимодействия - от времени, контекста и тд
 
-        public NpcContext(NpcData data) //Тут инициализируем список, Дату
+
+        public NpcContext(NpcData data)
         {
             Data = data;
         }
@@ -24,9 +25,8 @@ namespace MyGame.Core.Npc
 
         public void Interact()  //Сюда бы добавить PlayerContext
         {
-            //Тут для каждого списка компонентов сделать интеракт?
+
         }
 
-        //Методы для добавления, удаления компонентов
     }
 }
