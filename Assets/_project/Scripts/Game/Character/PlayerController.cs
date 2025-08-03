@@ -37,34 +37,39 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<OnInventoryOpen>(StopMovement);
-        EventBus.Subscribe<OnInventoryClose>(StartMovement);
+        //EventBus.Subscribe<OnInventoryOpen>(StopMovement);
+        //EventBus.Subscribe<OnInventoryClose>(StartMovement);
+        EventBus.Subscribe<OnChangeCharacterInput>(ToggleMovement);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<OnInventoryOpen>(StopMovement);
-        EventBus.Unsubscribe<OnInventoryClose>(StartMovement);
+        //EventBus.Unsubscribe<OnInventoryOpen>(StopMovement);
+        //EventBus.Unsubscribe<OnInventoryClose>(StartMovement);
+        EventBus.Unsubscribe<OnChangeCharacterInput>(ToggleMovement);
     }
 
     private void Update()
     {
-        HandleMovement();
+
+        HandleMovement();   //“ут внутри есть проверка на то, можно ли двигатьс€
         if (canMove)
             HandleRotation();
+
     }
 
     void HandleMovement()   //ƒобавить гравитацию
     {
-        Vector2 direction = moveAction.ReadValue<Vector2>();        
+        Vector2 direction = moveAction.ReadValue<Vector2>();
 
-        Vector3 move = (transform.forward * direction.y + transform.right * direction.x).normalized * moveSpeed;
-
+        Vector3 move = Vector3.zero; // = (transform.forward * direction.y + transform.right * direction.x).normalized * moveSpeed;
+        if (canMove)
+            move = (transform.forward * direction.y + transform.right * direction.x).normalized * moveSpeed;
         HandleGravity();
 
         move.y = verticalVelocity;
-        if (canMove)
-            characterController.Move(move * Time.deltaTime);  //Ќужно чтобы от себ€ шел вперед куда смотрит
+        
+        characterController.Move(move * Time.deltaTime);
     }
 
     void HandleGravity()
@@ -102,6 +107,11 @@ public class PlayerController : MonoBehaviour
     void StartMovement()
     {
         canMove = true;
+    }
+
+    void ToggleMovement(OnChangeCharacterInput e)
+    {
+        canMove = e.CanMove;
     }
 
 }

@@ -28,14 +28,14 @@ public class UIManager : MonoBehaviour
 
     private void OpenInventory()
     {
-        Cursor.lockState = CursorLockMode.None;
+        //Cursor.lockState = CursorLockMode.None;
         _inventoryPanel.SetActive(true);
         
     }
 
     private void CloseInventory()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         _inventoryPanel.SetActive(false);
         EventBus.Raise<OnInventoryClose>(new OnInventoryClose());
 

@@ -18,6 +18,6 @@ MonoBehaviour:
   choices:
   - text: "\u042F\u0441\u043D\u043E"
     nextNode: {fileID: 0}
-    onEndAction:
-    - {fileID: 11400000, guid: 533c26b11b7ba894287e609c353e05fe, type: 2}
-  onEndAction: []
+    onEndAction: []
+  onEndAction:
+  - {fileID: 11400000, guid: 533c26b11b7ba894287e609c353e05fe, type: 2}

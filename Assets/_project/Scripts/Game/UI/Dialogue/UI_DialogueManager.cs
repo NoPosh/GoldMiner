@@ -25,7 +25,7 @@ public class UI_DialogueManager : MonoBehaviour
     {
         NextNode(e.dialogue.startNode, e.context);
         dialoguePanel.SetActive(true);
-        Cursor.lockState = CursorLockMode.None;
+        //Cursor.lockState = CursorLockMode.None;
     }
 
     private void NextNode(DialogueNode node, DialogueContext context)
@@ -65,7 +65,7 @@ public class UI_DialogueManager : MonoBehaviour
     private void EndDialogue()
     {
         dialoguePanel.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
+        EventBus.Raise<OnDialogueEnd>(new OnDialogueEnd());
 
     }
 }

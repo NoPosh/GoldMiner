@@ -87,7 +87,7 @@ public class InventoryWindow : MonoBehaviour
             Hide(recycleInventoryUI.gameObject);
             recycleButton.onClick.RemoveAllListeners();
         }        
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         EventBus.Raise<OnInventoryClose>(new OnInventoryClose());
     }
 
@@ -101,7 +101,7 @@ public class InventoryWindow : MonoBehaviour
         {
             interactionContext = e.context;
             Show(e.playerInv, e.otherInv, interactionContext);
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.lockState = CursorLockMode.None;
             EventBus.Raise<OnInventoryOpen>(new OnInventoryOpen());
         }
     }
@@ -115,7 +115,7 @@ public class InventoryWindow : MonoBehaviour
         else
         {
             Show(e.playerInv, e.recycler);
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.lockState = CursorLockMode.None;
             EventBus.Raise<OnInventoryOpen>(new OnInventoryOpen());
         }
     }

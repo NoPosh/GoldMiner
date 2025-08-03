@@ -125,3 +125,18 @@ public struct OnDialogieStart
         this.context = context;
     }
 }
+public struct OnDialogueEnd
+{
+
+}
+
+public struct OnChangeCharacterInput
+{
+    public bool CanMove;
+    public OnChangeCharacterInput (bool canMove)
+    {
+        CanMove = canMove;
+    }
+}
+
+

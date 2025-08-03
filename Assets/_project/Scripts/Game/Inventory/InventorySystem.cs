@@ -7,16 +7,20 @@ public class InventorySystem : MonoBehaviour
     private InventoryComponent inventory;
     private InputAction inventoryAction;
 
+    private bool canMove = true;
+
     private void Awake()
     {
         inventory = GetComponent<InventoryComponent>();
         inventoryAction = InputSystem.actions.FindAction("Inventory");
         EventBus.Subscribe<ItemPickupAttemptEvent>(OnPickupAttempt);
+        EventBus.Subscribe<OnChangeCharacterInput>(ToggleInput);
     }
 
     private void OnDestroy()
     {
         EventBus.Unsubscribe<ItemPickupAttemptEvent>(OnPickupAttempt);
+        EventBus.Unsubscribe<OnChangeCharacterInput>(ToggleInput);
     }
 
     private void OnPickupAttempt(ItemPickupAttemptEvent e)
@@ -36,4 +40,8 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    private void ToggleInput(OnChangeCharacterInput e)
+    {
+        canMove = e.CanMove;
+    }
 }
