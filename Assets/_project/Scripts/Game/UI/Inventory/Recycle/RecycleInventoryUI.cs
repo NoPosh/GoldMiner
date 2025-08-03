@@ -8,19 +8,19 @@ public class RecycleInventoryUI : InventoryUI
 
     private List<InventorySlotUI> outputSlots = new();
     public RecyclerComponent Recycler { get; private set; }
-    public void Bind(RecyclerComponent recycle)
+    public void Bind(RecyclerComponent recycle, IInteractionContext context)
     {
         Recycler = recycle;
         Inventory = recycle.InputInventory;
         OutputInventory = recycle.OutputInventory;
 
-        BuildGrid();
+        BuildGrid(context);
         UpdateUI();
     }
 
-    protected override void BuildGrid()
+    protected override void BuildGrid(IInteractionContext context)
     {
-        base.BuildGrid();
+        base.BuildGrid(context);
 
         foreach (var slot in outputSlots)
         {
@@ -32,6 +32,7 @@ public class RecycleInventoryUI : InventoryUI
             var slot = Instantiate(slotPrefab, outputGridParent);
             slot.SetSlotIndex(i);
             slot.SetInventory(OutputInventory);
+            slot.context = context;
             outputSlots.Add(slot);
         }
 

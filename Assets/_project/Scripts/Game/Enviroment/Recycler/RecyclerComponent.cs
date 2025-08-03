@@ -34,7 +34,7 @@ public class RecyclerComponent : MonoBehaviour, IInteractable
 
     public void Interact(GameObject interactor)
     {
-        EventBus.Raise<OnInteractRecycle>(new OnInteractRecycle(interactor.GetComponent<CharacterComponent>().Inventory, this));        
+        EventBus.Raise<OnInteractRecycle>(new OnInteractRecycle(interactor.GetComponent<CharacterComponent>().InventoryComponent, this));        
     }
 
 

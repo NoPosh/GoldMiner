@@ -53,7 +53,12 @@ public class UI_DialogueManager : MonoBehaviour
             else
             {
                 answerButton.onClick.AddListener(EndDialogue);
+                foreach (var action in node.onEndAction)
+                {
+                    answerButton.onClick.AddListener(() => action.Execute(context));
+                }
             }
+
         }
     }
 
@@ -61,5 +66,6 @@ public class UI_DialogueManager : MonoBehaviour
     {
         dialoguePanel.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
+
     }
 }

@@ -17,7 +17,7 @@ public class ChestComponent : MonoBehaviour, IInteractable
 
     public void Interact(GameObject interactor)
     {
-        EventBus.Raise<OnInventoryInteract>(new OnInventoryInteract(interactor.GetComponent<CharacterComponent>().Inventory, GetInventoryComponent()));
+        EventBus.Raise<OnInventoryInteract>(new OnInventoryInteract(interactor.GetComponent<CharacterComponent>().InventoryComponent, GetInventoryComponent()));
     }
 
     public InventoryComponent GetInventoryComponent()

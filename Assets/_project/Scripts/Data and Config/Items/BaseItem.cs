@@ -20,6 +20,8 @@ public class BaseItem : ScriptableObject, IPotentially
     public bool isStackable;
     public int maxStack = 1;
 
+    public int itemPrice = 0;
+
     public Vector2Int potentialRange = new Vector2Int(0, 0); //например (20, 50)
     public Vector2Int artifactPotentialRange = new Vector2Int(0, 0);
 

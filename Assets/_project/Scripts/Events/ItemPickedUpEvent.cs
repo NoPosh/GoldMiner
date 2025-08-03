@@ -59,9 +59,9 @@ public struct OnInventoryInteract   //Нажата кнопка инвентаря
 {
     public InventoryComponent playerInv;
     public InventoryComponent otherInv;
-    public InteractionContext context;
+    public IInteractionContext context;
 
-    public OnInventoryInteract(InventoryComponent player, InventoryComponent other = null, InteractionContext context = null)
+    public OnInventoryInteract(InventoryComponent player, InventoryComponent other = null, IInteractionContext context = null)
     {
         playerInv = player;
         otherInv = other;

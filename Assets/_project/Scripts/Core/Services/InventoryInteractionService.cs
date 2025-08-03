@@ -2,9 +2,10 @@ using MyGame.Inventory;
 
 public class InventoryInteractionService
 {
-    public bool TransferItem(InventoryComponent fromInv, int fromIndex, InventoryComponent toInv, int toIndex, InteractionContext context)
+    public bool TransferItem(InventoryComponent fromInv, int fromIndex, InventoryComponent toInv, int toIndex, IInteractionContext context)
     {
         var fromCell = fromInv.Inventory.GetCell(fromIndex);
+        if (fromInv == toInv) return TransferItem(fromInv, fromIndex, toInv, toIndex);
 
         if (context.IsDrop) //&& fromCell.item.IsQuestItem
         {
@@ -20,12 +21,36 @@ public class InventoryInteractionService
         }
 
 
-        if (context.IsTrade && PlayerHasEnoughGold(fromInv.GetItem(fromIndex)))
+        if (context is TradeContext tradeContext)
         {
-            
+            int price = fromCell.item.itemPrice * fromCell.amount;
+            if (tradeContext.Player.InventoryComponent == fromInv)
+            {
+                if (tradeContext.Other.HasEnoughGold(price))
+                {
+                    if (TransferItem(fromInv, fromIndex, toInv, toIndex))
+                    {
+                        tradeContext.Other.DeductGold(price);
+                        tradeContext.Player.AddGold(price);
+                        return true;
+                    }
+                }
+            }
+            else if (tradeContext.Other.InventoryComponent == fromInv)
+            {
+                if (tradeContext.Player.HasEnoughGold(price))
+                {
+                    if (TransferItem(fromInv, fromIndex, toInv, toIndex))
+                    {
+                        tradeContext.Player.DeductGold(price);
+                        tradeContext.Other.AddGold(price);
+                        return true;
+                    }
+                }
+            }
+            else return false;
         }
             
-
 
         return TransferItem(fromInv, fromIndex, toInv, toIndex);
     }
@@ -40,7 +65,7 @@ public class InventoryInteractionService
         }
     }
 
-    private bool PlayerHasEnoughGold(BaseItem item)
+    private bool PlayerHasEnoughGold(BaseItem item) //Тут нужно взять контекст второго персонажа и понять хватает ли у него денег заплатить
     {
         //Тут какая-нибудь логика стоимости и тд
         //Комиссия за торговлю, блокировка квестовых предметов, разрешения (NPC Только отдает и тд)

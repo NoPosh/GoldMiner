@@ -20,5 +20,6 @@ MonoBehaviour:
   icon: {fileID: -1591073262, guid: 7e2772704edd2cc438c90cec3b8886ee, type: 3}
   isStackable: 1
   maxStack: 100
+  itemPrice: 10
   potentialRange: {x: 0, y: 0}
   artifactPotentialRange: {x: 0, y: 0}

@@ -6566,6 +6566,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NpcData: {fileID: 11400000, guid: bcfb0c55830831841a744e5ef541bcef, type: 2}
+  inventorySize: 10
+  monewAmount: 200
 --- !u!1 &1333194288
 GameObject:
   m_ObjectHideFlags: 0

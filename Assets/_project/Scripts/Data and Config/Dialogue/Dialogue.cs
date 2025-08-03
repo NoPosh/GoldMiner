@@ -20,6 +20,5 @@ public class DialogueContext
         characterComponent = player;
         npcComponent = npc;
     }
-    //+ возможно UI?
 }
 

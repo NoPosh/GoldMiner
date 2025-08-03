@@ -41,6 +41,5 @@ namespace MyGame.Core.Npc
         {
             OnDialogueStart?.Invoke();
         }
-
     }
 }

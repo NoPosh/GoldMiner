@@ -10,7 +10,7 @@ public class InventoryUI : MonoBehaviour
 
     protected List<InventorySlotUI> slots = new();
 
-    public virtual void Bind(InventoryComponent inv, InteractionContext context)
+    public virtual void Bind(InventoryComponent inv, IInteractionContext context)
     {
         Inventory = inv;
         BuildGrid(context);
@@ -28,7 +28,7 @@ public class InventoryUI : MonoBehaviour
         EventBus.Unsubscribe<OnInventoryChanged>(UpdateUI);
     }
 
-    protected virtual void BuildGrid(InteractionContext context)
+    protected virtual void BuildGrid(IInteractionContext context)
     {
         foreach (var slot in slots)
         {

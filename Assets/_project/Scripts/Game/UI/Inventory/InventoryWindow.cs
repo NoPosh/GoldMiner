@@ -12,6 +12,8 @@ public class InventoryWindow : MonoBehaviour
 
     [SerializeField] private Button recycleButton;
 
+    private IInteractionContext interactionContext;
+
     //Тут надо что-то типо флага InteractionContext?
 
     //Тут сделать подписку на событие, которое в себе содержит два InventoryComponent, но второе может быть null
@@ -34,37 +36,39 @@ public class InventoryWindow : MonoBehaviour
         Hide(InventoryPanel);
     }
 
-    public void Show(InventoryComponent playerInv, InventoryComponent otherInv = null, InteractionContext context = null)
+    public void Show(InventoryComponent playerInv, InventoryComponent otherInv = null, IInteractionContext context = null)
     {
-        if (context == null)
+        interactionContext = context;
+        if (interactionContext == null)
         {
-            context = new InteractionContext();
+            interactionContext = new InteractionContext();
         }
 
         InventoryPanel.SetActive(true);
 
-        playerInventoryUI.Bind(playerInv, context);
+        playerInventoryUI.Bind(playerInv, interactionContext);
 
         if (otherInv != null)
         {
-            otherInventoryUI.Bind(otherInv, context);
+            otherInventoryUI.Bind(otherInv, interactionContext);
             otherInventoryUI.gameObject.SetActive(true);
         }
         else Hide(otherInventoryUI.gameObject);
     }
 
-    public void Show(InventoryComponent playerInv, RecyclerComponent recycleInv, InteractionContext context = null) //Тут контекст это Переработчик
+    public void Show(InventoryComponent playerInv, RecyclerComponent recycleInv, IInteractionContext context = null) //Тут контекст это Переработчик
     {
-        if (context == null)
+        interactionContext = context;
+        if (interactionContext == null)
         {
-            context = new InteractionContext();
+            interactionContext = new InteractionContext();
         }
 
         InventoryPanel.SetActive(true);
 
-        playerInventoryUI.Bind(playerInv, context);
+        playerInventoryUI.Bind(playerInv, interactionContext);
 
-        recycleInventoryUI.Bind(recycleInv);
+        recycleInventoryUI.Bind(recycleInv, interactionContext);
         recycleInventoryUI.gameObject.SetActive(true);
         recycleButton.onClick.AddListener(SwitchRecycle);
     }
@@ -95,9 +99,8 @@ public class InventoryWindow : MonoBehaviour
         }
         else
         {
-            //Тут сделать зависимость от InteractContext в e
-            InteractionContext context = e.context;
-            Show(e.playerInv, e.otherInv, context);
+            interactionContext = e.context;
+            Show(e.playerInv, e.otherInv, interactionContext);
             Cursor.lockState = CursorLockMode.None;
             EventBus.Raise<OnInventoryOpen>(new OnInventoryOpen());
         }
@@ -123,7 +126,7 @@ public class InventoryWindow : MonoBehaviour
         {
             InventoryComponent toInv = e.cell.Inventory == playerInventoryUI.Inventory.Inventory ? otherInventoryUI.Inventory : playerInventoryUI.Inventory;
             InventoryComponent fromInv = e.cell.Inventory == playerInventoryUI.Inventory.Inventory ? playerInventoryUI.Inventory : otherInventoryUI.Inventory;
-            Services.InventoryInteractionService.TransferItem(fromInv, e.cell.index, toInv, toInv.GetFirstFreeSlotIndex(), new InteractionContext());
+            Services.InventoryInteractionService.TransferItem(fromInv, e.cell.index, toInv, toInv.GetFirstFreeSlotIndex(), interactionContext);
         }
         else if (recycleInventoryUI.gameObject.activeSelf)
         {
@@ -135,7 +138,7 @@ public class InventoryWindow : MonoBehaviour
         else
         {
             InventoryComponent inv = playerInventoryUI.Inventory;
-            Services.InventoryInteractionService.TransferItem(inv, e.cell.index, inv, inv.GetFirstFreeSlotIndex(), new InteractionContext());
+            Services.InventoryInteractionService.TransferItem(inv, e.cell.index, inv, inv.GetFirstFreeSlotIndex(), interactionContext);
         }
     }
 

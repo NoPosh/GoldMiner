@@ -12,7 +12,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private InputAction shiftAction;
 
-    public InteractionContext context;
+    public IInteractionContext context;
 
     public static InventorySlotUI draggedSlot { get; private set; }
     [SerializeField] Image itemImage;
