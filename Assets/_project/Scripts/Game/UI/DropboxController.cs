@@ -7,9 +7,10 @@ public class DropboxController : MonoBehaviour, IDropHandler
     public void OnDrop(PointerEventData eventData)
     {
         var slot = InventorySlotUI.draggedSlot;
-        if (slot != null)
+        if (slot != null)   //Тут надо сделать проверку можно ли (тк сейчас можно выбрасывать из инвентаря торговца)
         {
-            slot.InventoryComponent.DropItem(slot.slotIndex);
+            if (!(InventorySlotUI.draggedSlot.context is TradeContext))
+                slot.InventoryComponent.DropItem(slot.slotIndex);
         }
     }
 }
