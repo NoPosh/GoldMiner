@@ -15,16 +15,6 @@ public class UIManager : MonoBehaviour
         Instance = this;
     }
 
-    private void OnEnable()
-    {
-        //EventBus.Subscribe<OnInventoryInteract>(InteractInventory);
-    }
-
-    private void OnDisable()
-    {
-        //EventBus.Unsubscribe<OnInventoryOpen>(InteractInventory);
-    }
-
     private void Start()
     {
         CloseInventory();
@@ -50,12 +40,6 @@ public class UIManager : MonoBehaviour
         EventBus.Raise<OnInventoryClose>(new OnInventoryClose());
 
         if (sideInventoryPanel) CloseSideInventory();
-    }
-
-    private void OpenSideInventory(OnOpenChest e)
-    {
-        OpenInventory();
-        sideInventoryPanel.SetActive(true);
     }
 
     private void CloseSideInventory()

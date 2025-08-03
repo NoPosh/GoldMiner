@@ -16,13 +16,11 @@ public class InteractorComponent : MonoBehaviour
     {
         interactAction = InputSystem.actions.FindAction("Interact");
         playerCamera = GetComponentInChildren<CinemachineCamera>();
-        
     }
 
     private void Update()
     {
         FindTarget();
-
         if (interactAction.triggered)
         {
             if (currentInteractable != null) currentInteractable.Interact(gameObject);
@@ -39,7 +37,6 @@ public class InteractorComponent : MonoBehaviour
             {
                 currentInteractable = interactable;
                 //Подсветка, подсказка
-                //Debug.Log("Навелись на " + hit.collider.gameObject.name);
             }
         }
     }

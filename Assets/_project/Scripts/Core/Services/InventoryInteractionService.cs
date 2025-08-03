@@ -20,15 +20,14 @@ public class InventoryInteractionService
         }
 
 
-        if (context.IsTrade && !PlayerHasEnoughGold(fromCell.item))
-            return false;
-        //Проверить тот же это инвентарь или нет
-        if (!(fromInv == toInv))
-            return Inventory.MoveItemBetween(fromInv.Inventory, fromIndex, toInv.Inventory, toIndex);
-        else
+        if (context.IsTrade && PlayerHasEnoughGold(fromInv.GetItem(fromIndex)))
         {
-            return fromInv.MoveItem(fromIndex, toIndex);
+            
         }
+            
+
+
+        return TransferItem(fromInv, fromIndex, toInv, toIndex);
     }
 
     public bool TransferItem(InventoryComponent fromInv, int fromIndex, InventoryComponent toInv, int toIndex)

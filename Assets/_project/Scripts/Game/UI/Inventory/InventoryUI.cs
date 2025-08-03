@@ -10,10 +10,10 @@ public class InventoryUI : MonoBehaviour
 
     protected List<InventorySlotUI> slots = new();
 
-    public virtual void Bind(InventoryComponent inv)
+    public virtual void Bind(InventoryComponent inv, InteractionContext context)
     {
         Inventory = inv;
-        BuildGrid();
+        BuildGrid(context);
         UpdateUI();
     }
 
@@ -28,7 +28,7 @@ public class InventoryUI : MonoBehaviour
         EventBus.Unsubscribe<OnInventoryChanged>(UpdateUI);
     }
 
-    protected virtual void BuildGrid()
+    protected virtual void BuildGrid(InteractionContext context)
     {
         foreach (var slot in slots)
         {
@@ -40,6 +40,7 @@ public class InventoryUI : MonoBehaviour
             var slot = Instantiate(slotPrefab, gridParent);
             slot.SetSlotIndex(i);
             slot.SetInventory(Inventory);
+            slot.context = context;
             slots.Add(slot);
         }
     }

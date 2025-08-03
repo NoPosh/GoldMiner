@@ -12,6 +12,8 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private InputAction shiftAction;
 
+    public InteractionContext context;
+
     public static InventorySlotUI draggedSlot { get; private set; }
     [SerializeField] Image itemImage;
     [SerializeField] Button Button;
@@ -20,6 +22,8 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private void Awake()
     {
         shiftAction = InputSystem.actions.FindAction("Sprint");
+        if (context == null)
+            context = new InteractionContext();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -53,7 +57,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (draggedSlot != null && draggedSlot != this)
         {
-            Services.InventoryInteractionService.TransferItem(draggedSlot.InventoryComponent, draggedSlot.slotIndex, this.InventoryComponent, this.slotIndex, new InteractionContext());
+            Services.InventoryInteractionService.TransferItem(draggedSlot.InventoryComponent, draggedSlot.slotIndex, this.InventoryComponent, this.slotIndex, context);
         }
     }
 

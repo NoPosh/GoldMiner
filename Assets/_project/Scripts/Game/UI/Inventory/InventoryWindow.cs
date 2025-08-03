@@ -12,6 +12,8 @@ public class InventoryWindow : MonoBehaviour
 
     [SerializeField] private Button recycleButton;
 
+    //Тут надо что-то типо флага InteractionContext?
+
     //Тут сделать подписку на событие, которое в себе содержит два InventoryComponent, но второе может быть null
     private void OnEnable()
     {
@@ -32,25 +34,35 @@ public class InventoryWindow : MonoBehaviour
         Hide(InventoryPanel);
     }
 
-    public void Show(InventoryComponent playerInv, InventoryComponent otherInv = null)
+    public void Show(InventoryComponent playerInv, InventoryComponent otherInv = null, InteractionContext context = null)
     {
+        if (context == null)
+        {
+            context = new InteractionContext();
+        }
+
         InventoryPanel.SetActive(true);
 
-        playerInventoryUI.Bind(playerInv);
+        playerInventoryUI.Bind(playerInv, context);
 
         if (otherInv != null)
         {
-            otherInventoryUI.Bind(otherInv);
+            otherInventoryUI.Bind(otherInv, context);
             otherInventoryUI.gameObject.SetActive(true);
         }
         else Hide(otherInventoryUI.gameObject);
     }
 
-    public void Show(InventoryComponent playerInv, RecyclerComponent recycleInv)
+    public void Show(InventoryComponent playerInv, RecyclerComponent recycleInv, InteractionContext context = null) //Тут контекст это Переработчик
     {
+        if (context == null)
+        {
+            context = new InteractionContext();
+        }
+
         InventoryPanel.SetActive(true);
 
-        playerInventoryUI.Bind(playerInv);
+        playerInventoryUI.Bind(playerInv, context);
 
         recycleInventoryUI.Bind(recycleInv);
         recycleInventoryUI.gameObject.SetActive(true);
@@ -75,7 +87,7 @@ public class InventoryWindow : MonoBehaviour
         EventBus.Raise<OnInventoryClose>(new OnInventoryClose());
     }
 
-    private void InteractInventory(OnInventoryInteract e)   //Можно сделать через интерфейс. Чтобы в ивенте передавался интерфейс, который может: Выдать оба инвентаря
+    private void InteractInventory(OnInventoryInteract e)
     {
         if (InventoryPanel.gameObject.activeSelf)
         {
@@ -83,7 +95,9 @@ public class InventoryWindow : MonoBehaviour
         }
         else
         {
-            Show(e.playerInv, e.otherInv);
+            //Тут сделать зависимость от InteractContext в e
+            InteractionContext context = e.context;
+            Show(e.playerInv, e.otherInv, context);
             Cursor.lockState = CursorLockMode.None;
             EventBus.Raise<OnInventoryOpen>(new OnInventoryOpen());
         }

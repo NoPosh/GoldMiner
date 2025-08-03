@@ -24,15 +24,6 @@ public struct ItemPickupAttemptEvent
     public Action<bool> onResult;  // Callback для результата
 }
 
-public struct OnOpenChest   //Открытие сундука
-{
-    public InventoryComponent Inventory;
-    public OnOpenChest (InventoryComponent inventory)
-    { 
-        this.Inventory = inventory; 
-    }
-}
-
 public struct OnInteractRecycle
 {
     public InventoryComponent playerInv;
@@ -68,11 +59,15 @@ public struct OnInventoryInteract   //Нажата кнопка инвентаря
 {
     public InventoryComponent playerInv;
     public InventoryComponent otherInv;
+    public InteractionContext context;
 
-    public OnInventoryInteract(InventoryComponent player, InventoryComponent other = null)
+    public OnInventoryInteract(InventoryComponent player, InventoryComponent other = null, InteractionContext context = null)
     {
         playerInv = player;
         otherInv = other;
+        if (context != null)
+            this.context = context;
+        else this.context = new InteractionContext();
     }
 }
 
@@ -117,5 +112,16 @@ public struct OnOreCollectedGloabal
     public OnOreCollectedGloabal(Ore ore)
     {
         this.ore = ore;
+    }
+}
+
+public struct OnDialogieStart
+{
+    public Dialogue dialogue;
+    public DialogueContext context;
+    public OnDialogieStart (Dialogue dialogue, DialogueContext context)
+    {
+        this.dialogue = dialogue;
+        this.context = context;
     }
 }

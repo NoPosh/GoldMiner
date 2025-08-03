@@ -67,7 +67,7 @@ namespace MyGame.Inventory
             OnInventoryChanged?.Invoke();
             return amount;
         }
-
+        //Можно сделать еще один метод AddItem (int itemId, amount); который будет через Сервис искать что это за предмет
         public virtual void RemoveItem(int index, int amount = 1)
         {
             _cells[index].Clear();
