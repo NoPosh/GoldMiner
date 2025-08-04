@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
+    public NpcDatabase NpcDatabase;
     private bool IsInventoryOpen;
     private bool IsDialogOpen;
 
@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(gameObject);
             }
-        Services.Initialize();
+        Services.Initialize(NpcDatabase);  
 
         EventBus.Subscribe<OnInventoryOpen>(InventoryOpen);
         EventBus.Subscribe<OnInventoryClose>(InventoryClose);

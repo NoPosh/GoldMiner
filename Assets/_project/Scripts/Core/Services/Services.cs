@@ -1,16 +1,15 @@
 
+using MyGame.Core;
+
 public static class Services
 {
-    public static InventoryInteractionService InventoryInteractionService { get; private set; }
+    public static InventoryInteractionService InventoryInteractionService { get; private set;}
+    public static CreatingNpcService CreatingNpcService { get; private set;}
     //+ другие сервисы
 
-    public static void Initialize()
+    public static void Initialize(NpcDatabase npcDatabase)
     {
         InventoryInteractionService = new InventoryInteractionService();
-        //И другие
+        CreatingNpcService = new CreatingNpcService(npcDatabase);
     }
-
-    //Когда понадобится можно просто
-    //В GameManager.Awake или Bootstrapper Services.Initialize(), а потом везде
-    //Services.InventoryInteractions.TransferItem(playerInv, 0, chestInv, 3);
 }

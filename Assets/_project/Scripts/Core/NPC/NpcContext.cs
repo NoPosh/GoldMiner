@@ -11,7 +11,8 @@ namespace MyGame.Core.Npc
         public Money Money { get; private set; }
 
         public NpcData Data { get;}
-        private bool CanInteract = true;
+        private bool canInteract = true;
+        public bool CanInteract => canInteract;
 
         public event Action OnDialogueStart;
 
@@ -29,8 +30,7 @@ namespace MyGame.Core.Npc
 
         public void Interact()  //Сюда бы добавить PlayerContext
         {
-            //Пока что просто диалог
-            if (CanInteract && Data.dialog != null)
+            if (canInteract && Data.dialog != null)
             {
                 StartDialogue();
             }
@@ -41,5 +41,6 @@ namespace MyGame.Core.Npc
         {
             OnDialogueStart?.Invoke();
         }
+
     }
 }
