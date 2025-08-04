@@ -4,8 +4,8 @@ namespace MyGame.Core
 {
     public abstract class Storage
     {
-        public Inventory.Inventory Inventory { get; private set; }
-        public bool IsLocked { get; private set; }
+        public Inventory.Inventory Inventory { get; protected set; }
+        public bool IsLocked { get; protected set; }
 
         public Storage(int size)
         {
