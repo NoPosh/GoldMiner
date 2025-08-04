@@ -17,6 +17,8 @@ public class NpcComponent : MonoBehaviour, IInteractable, ITrader
     private CharacterComponent characterComponent;
     public InventoryComponent InventoryComponent { get; private set; }
 
+    public bool IsCustomer = false;
+
     private Action handler;
 
     private void Awake()
@@ -27,7 +29,7 @@ public class NpcComponent : MonoBehaviour, IInteractable, ITrader
         Init(NpcContext);                   
     }
 
-    public void Init(NpcContext context)
+    public void Init(NpcContext context, bool isCustomer = false)
     {
         NpcContext.OnDialogueStart -= handler;
 
@@ -40,6 +42,8 @@ public class NpcComponent : MonoBehaviour, IInteractable, ITrader
         if (InventoryComponent == null) InventoryComponent = gameObject.AddComponent<InventoryComponent>();
         InventoryComponent.Initialize(NpcContext.Inventory);
        
+        IsCustomer = isCustomer;
+
         NpcContext.OnDialogueStart += handler;
     }
 
@@ -52,15 +56,12 @@ public class NpcComponent : MonoBehaviour, IInteractable, ITrader
     public void Interact(GameObject interactor)
     {
         characterComponent = interactor.GetComponent<CharacterComponent>();
-        Debug.Log(NpcContext.CanInteract);
         this.NpcContext.Interact();
     }
 
     private void StartDialogue()    //Возможно надо уточнить какой диалог если будет Дерево
     {
-        //Тут нужно что-то типо UI_DialogueManager
-        Debug.Log("Начали диалог");
-        EventBus.Raise<OnDialogieStart>(new OnDialogieStart(NpcData.dialog, new DialogueContext(characterComponent, this)));
+        EventBus.Raise<OnDialogieStart>(new OnDialogieStart(NpcData.dialog, new DialogueContext(characterComponent, this, IsCustomer)));
     }
 
     public bool HasEnoughGold(int amount)

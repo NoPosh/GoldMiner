@@ -15,5 +15,10 @@ namespace MyGame.Core
             NpcContext context = new NpcContext(_database.GetRandomCustomer(), 1, 100);
             return context;
         }
+
+        public Dialogue GetRandomDialogue()
+        {
+            return _database.GenerateRandomDialog();
+        }
     }
 }

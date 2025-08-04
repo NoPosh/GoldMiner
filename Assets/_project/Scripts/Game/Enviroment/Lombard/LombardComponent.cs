@@ -32,6 +32,6 @@ public class LombardComponent : MonoBehaviour
         obj.transform.position = _spawnPoint.position;
 
         NpcComponent npcComponent = obj.AddComponent<NpcComponent>();
-        npcComponent.Init(_generator._currentNpc);
+        npcComponent.Init(_generator._currentNpc, true);
     }
 }

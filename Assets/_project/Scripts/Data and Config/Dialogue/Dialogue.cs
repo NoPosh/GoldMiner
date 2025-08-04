@@ -14,11 +14,12 @@ public class DialogueContext
 {
     public CharacterComponent characterComponent;
     public NpcComponent npcComponent;
+    public bool IsCustomer;
 
-    public DialogueContext(CharacterComponent player, NpcComponent npc)
+    public DialogueContext(CharacterComponent player, NpcComponent npc, bool isCustomer = false)
     {
         characterComponent = player;
         npcComponent = npc;
+        IsCustomer = isCustomer;
     }
 }
-

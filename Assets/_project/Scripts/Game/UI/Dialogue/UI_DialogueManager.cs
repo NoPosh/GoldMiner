@@ -23,9 +23,15 @@ public class UI_DialogueManager : MonoBehaviour
 
     private void StartDialogue(OnDialogieStart e)
     {
-        NextNode(e.dialogue.startNode, e.context);
+        if (!e.context.IsCustomer)
+        {
+            NextNode(e.dialogue.startNode, e.context);            
+        }
+        else
+        {
+            NextNode(Services.CreatingNpcService.GetRandomDialogue().startNode, e.context);
+        }
         dialoguePanel.SetActive(true);
-        //Cursor.lockState = CursorLockMode.None;
     }
 
     private void NextNode(DialogueNode node, DialogueContext context)
@@ -42,6 +48,7 @@ public class UI_DialogueManager : MonoBehaviour
         {
             Button answerButton = Instantiate(answerPrefab, answerParent);
             answerButton.GetComponentInChildren<TMP_Text>().text = choice.text;
+            if (choice.onEndAction != null)
             foreach (var action in choice.onEndAction)
             {
                 answerButton.onClick.AddListener(() => action.Execute(context));
@@ -58,7 +65,13 @@ public class UI_DialogueManager : MonoBehaviour
                     answerButton.onClick.AddListener(() => action.Execute(context));
                 }
             }
-
+        }
+        if (node.choices.Count == 0)
+        {
+            //Добавляем кнопку, завершающую диалог
+            Button answerButton = Instantiate(answerPrefab, answerParent);
+            answerButton.GetComponentInChildren<TMP_Text>().text = "Бывай";
+            answerButton.onClick.AddListener(EndDialogue);
         }
     }
 
