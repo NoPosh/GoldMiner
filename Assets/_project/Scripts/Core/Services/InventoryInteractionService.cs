@@ -48,7 +48,7 @@ public class InventoryInteractionService
                     }
                 }
             }
-            else return false;
+            return false;
         }
             
 

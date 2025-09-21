@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using MyGame.EventBus;
 using System.Drawing;
 using System;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 
 namespace MyGame.Inventory
 {
